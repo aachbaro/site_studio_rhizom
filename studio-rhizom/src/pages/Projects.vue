@@ -1,22 +1,24 @@
 <template>
-  <div>
-    <h1>Nos Projets</h1>
-    <ProjectCard v-for="p in projects" :key="p.title" :project="p" />
+  <div class="px-4 py-8 max-w-screen-lg mx-auto">
+    <h1 class="text-2xl font-semibold mb-6">Nos Projets</h1>
+    <div class="grid md:grid-cols-2 gap-8">
+      <ProjectCard v-for="p in projects" :key="p.title" :project="p" />
+    </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
 import ProjectCard from '../components/ProjectCard.vue'
-import projects from '../../public/data/projects.json'
 
-export default {
-  name: 'ProjectsPage',
-  components: { ProjectCard },
-  data() {
-    return { projects }
-  }
-}
+const projects = ref([])
+
+onMounted(async () => {
+  const res = await fetch('/data/projects.json')
+  projects.value = await res.json()
+})
 </script>
 
 <style scoped>
+/* tu peux ajouter des styles custom ici */
 </style>
