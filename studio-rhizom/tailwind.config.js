@@ -2,7 +2,7 @@
 module.exports = {
   content: [
     './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}',
+    './src/**/*.{vue,js,ts,jsx,tsx}'
   ],
   theme: {
     extend: {
@@ -10,11 +10,10 @@ module.exports = {
         background: '#FFFFFF',
         foreground: '#000000',
         primary: '#00FF99',
-        muted: '#999999',
       },
       fontFamily: {
         sans: ['Manrope', 'sans-serif'],
-      },
+      }
     },
   },
   plugins: [],

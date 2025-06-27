@@ -19,3 +19,18 @@
     </div>
   </header>
 </template>
+
+<script setup>
+import { onMounted } from 'vue'
+
+const links = [
+  { name: 'Collectif', path: '/collectif' },
+  { name: 'Projets',   path: '/projets'   },
+  { name: 'Catalogue', path: '/catalogue' },
+  { name: 'Contact',   path: '/contact'   }
+]
+
+onMounted(() => {
+  console.log('🧭 NavBar monté, links =', links)
+})
+</script>
