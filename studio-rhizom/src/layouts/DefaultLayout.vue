@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-background text-foreground font-sans">
+  <div class="min-h-screen bg-white text-black font-sans">
     <NavBar />
-    <main class="px-4 py-8">
+    <main class="max-w-screen-lg mx-auto px-4 py-8">
       <slot />
     </main>
     <Footer />
