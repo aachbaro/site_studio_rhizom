@@ -1,22 +1,14 @@
 <template>
-  <div class="min-h-screen font-sans bg-neutral-950 text-white flex flex-col">
+  <div class="min-h-screen bg-background text-foreground font-sans">
     <NavBar />
-    <main class="flex-1">
+    <main class="px-4 py-8">
       <slot />
     </main>
     <Footer />
   </div>
 </template>
 
-<script>
+<script setup>
 import NavBar from '../components/NavBar.vue'
 import Footer from '../components/Footer.vue'
-
-export default {
-  name: 'DefaultLayout',
-  components: { NavBar, Footer }
-}
 </script>
-
-<style scoped>
-</style>
