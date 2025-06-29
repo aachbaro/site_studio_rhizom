@@ -13,14 +13,13 @@
       <!-- 2. Formulaire -->
       <form
         class="w-full md:w-3/4 grid grid-cols-1 gap-6"
-        action="mailto:contact@studiorhizom.com"
-        method="POST"
-        enctype="text/plain"
+        @submit.prevent="onSubmit"
       >
         <input
           type="text"
           name="nom"
           placeholder="Nom"
+          v-model="nom"
           required
           class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
         />
@@ -28,6 +27,7 @@
           type="email"
           name="email"
           placeholder="E-mail"
+          v-model="email"
           required
           class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
         />
@@ -35,6 +35,7 @@
           type="text"
           name="objet"
           placeholder="Objet"
+          v-model="objet"
           required
           class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
         />
@@ -42,6 +43,7 @@
           name="message"
           rows="8"
           placeholder="Message"
+          v-model="message"
           required
           class="w-full border border-black rounded-2xl px-6 py-4 placeholder-black/50 focus:outline-none resize-none"
         ></textarea>
@@ -51,14 +53,43 @@
         >
           envoyer
         </button>
+        <p v-if="success" class="text-green-600">Message envoyé !</p>
+        <p v-if="error" class="text-red-600">{{ error }}</p>
       </form>
     </div>
   </section>
 </template>
 
 <script setup>
-// Pas de logique JavaScript nécessaire pour un envoi mailto.
-// Si tu veux un vrai back-end ou Formspree, il suffit de remplacer l'attribut `action`.
+import { ref } from 'vue'
+import { sendContact } from '../../services/api'
+
+const nom = ref('')
+const email = ref('')
+const objet = ref('')
+const message = ref('')
+const success = ref(false)
+const error = ref('')
+
+async function onSubmit() {
+  success.value = false
+  error.value = ''
+  try {
+    await sendContact({
+      name: nom.value,
+      email: email.value,
+      objet: objet.value,
+      message: message.value
+    })
+    success.value = true
+    nom.value = ''
+    email.value = ''
+    objet.value = ''
+    message.value = ''
+  } catch (e) {
+    error.value = e.message || 'Une erreur est survenue'
+  }
+}
 </script>
 
 <style scoped>
