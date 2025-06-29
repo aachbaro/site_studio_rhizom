@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    env_file: backend/.env
+    ports:
+      - "3001:3001"
+    working_dir: /app
+    command: ["node", "server.js"]
+

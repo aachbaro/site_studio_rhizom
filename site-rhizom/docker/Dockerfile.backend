@@ -1,0 +1,6 @@
+FROM node:lts
+WORKDIR /app
+COPY backend ./
+RUN npm install --production
+CMD ["node", "server.js"]
+
