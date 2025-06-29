@@ -12,6 +12,7 @@ module.exports = {
         primary: '#00FF99',
       },
       fontFamily: {
+        halogen: ['Halogen', 'sans-serif'],
         sans: ['Manrope', 'sans-serif'],
       },
     },

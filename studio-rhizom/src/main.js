@@ -1,5 +1,5 @@
 // src/main.js
-import './main.css'      // <-- pas ./assets/index.css
+import './tailwind.css'      // <-- pas ./assets/index.css
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
