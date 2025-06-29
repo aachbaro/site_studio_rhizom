@@ -24,13 +24,12 @@
 import { onMounted } from 'vue'
 
 const links = [
-  { name: 'Collectif', path: '/collectif' },
-  { name: 'Projets',   path: '/projets'   },
-  { name: 'Catalogue', path: '/catalogue' },
-  { name: 'Contact',   path: '/contact'   }
+  { name: 'Projets', path: '/projets' },
+  { name: 'Studio',  path: '/studio'  },
+  { name: 'Contact', path: '/contact' }
 ]
 
 onMounted(() => {
-  console.log('🧭 NavBar monté, links =', links)
+  console.log('🧭 Header monté, links =', links)
 })
 </script>
