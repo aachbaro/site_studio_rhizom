@@ -8,7 +8,11 @@ const routes = [
   { path: '/', component: Home },
   { path: '/projets', component: Projets },
   { path: '/studio', component: Studio },
-  { path: '/contact', component: Contact }
+  { path: '/contact', component: Contact },
+  {
+    path: '/admin/projects',
+    component: () => import('../views/AdminProjects.vue')
+  }
 ]
 
 const router = createRouter({

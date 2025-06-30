@@ -1,12 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const { sendMail } = require('./mailer');
+const projectsRouter = require('./routes/projects');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/projects', projectsRouter);
 
 app.post('/contact', async (req, res) => {
   const { name, email, message } = req.body;
