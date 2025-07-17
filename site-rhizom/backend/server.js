@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // ----- ROUTE EMAIL CONTACT -----
-app.post("/contact", async (req, res) => {
+app.post("/api/contact", async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
     return res.status(400).json({ error: "Missing name, email or message" });
@@ -74,7 +74,9 @@ const fs = require("fs");
 app.delete("/api/carousel/:id", (req, res) => {
   const id = req.params.id;
   try {
-    const img = db.prepare("SELECT url FROM carousel_images WHERE id = ?").get(id);
+    const img = db
+      .prepare("SELECT url FROM carousel_images WHERE id = ?")
+      .get(id);
     if (!img) return res.status(404).json({ error: "Image non trouvée" });
 
     // Supprime le fichier physique
@@ -112,6 +114,25 @@ app.post("/api/projects", upload.single("image"), (req, res) => {
     res.status(201).json({ id: info.lastInsertRowid, url, title });
   } catch (err) {
     res.status(500).json({ error: "Failed to insert project" });
+  }
+});
+
+app.delete("/api/projects/:id", (req, res) => {
+  const id = req.params.id;
+  try {
+    const proj = db.prepare("SELECT url FROM projects WHERE id = ?").get(id);
+    if (!proj) return res.status(404).json({ error: "Projet non trouvé" });
+
+    // Supprime le fichier image
+    const path = __dirname + "/public" + proj.url;
+    if (fs.existsSync(path)) fs.unlinkSync(path);
+
+    // Supprime la ligne BDD
+    db.prepare("DELETE FROM projects WHERE id = ?").run(id);
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de la suppression du projet" });
   }
 });
 

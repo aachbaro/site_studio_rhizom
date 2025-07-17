@@ -11,7 +11,7 @@
           class="flex-shrink-0 w-[calc(50%-1.5rem)] snap-start relative"
         >
           <img
-            :src="p.image"
+            :src="p.url"
             :alt="p.title"
             class="w-full h-auto object-cover rounded-md"
           />

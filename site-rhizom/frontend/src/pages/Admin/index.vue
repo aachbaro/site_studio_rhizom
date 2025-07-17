@@ -37,21 +37,37 @@
       />
       <button @click="handleSubmit" class="btn">Uploader</button>
       <p v-if="uploadStatus" style="margin-top: 12px">{{ uploadStatus }}</p>
-    </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div v-for="img in images" :key="img.id" class="relative group">
-        <img
-          :src="img.url"
-          :alt="img.title"
-          class="rounded shadow w-full h-48 object-cover"
-        />
-        <button
-          @click="deleteImage(img.id)"
-          class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded opacity-80 hover:opacity-100"
-        >
-          Supprimer
-        </button>
-        <div class="text-xs text-center mt-1">{{ img.title }}</div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div v-for="img in images" :key="img.id" class="relative group">
+          <img
+            :src="img.url"
+            :alt="img.title"
+            class="rounded shadow w-full h-48 object-cover"
+          />
+          <button
+            @click="deleteImage(img.id)"
+            class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded opacity-80 hover:opacity-100"
+          >
+            Supprimer
+          </button>
+          <div class="text-xs text-center mt-1">{{ img.title }}</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div v-for="proj in projets" :key="proj.id" class="relative group">
+          <img
+            :src="proj.url"
+            :alt="proj.title"
+            class="rounded shadow w-full h-48 object-cover"
+          />
+          <button
+            @click="deleteProjet(proj.id)"
+            class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded opacity-80 hover:opacity-100"
+          >
+            Supprimer
+          </button>
+          <div class="text-xs text-center mt-1">{{ proj.title }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -126,14 +142,31 @@ const deleteImage = async (id) => {
   }
 };
 
+const deleteProjet = async (id) => {
+  if (!confirm("Supprimer ce projet ?")) return;
+  const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+  if (res.ok) {
+    projets.value = projets.value.filter((p) => p.id !== id);
+  } else {
+    alert("Erreur lors de la suppression !");
+  }
+};
+
 const images = ref([]);
 
 const fetchImages = async () => {
   const res = await fetch("/api/carousel");
   images.value = await res.json();
 };
+const projets = ref([]);
+
+const fetchProjets = async () => {
+  const res = await fetch("/api/projects");
+  projets.value = await res.json();
+};
 
 onMounted(fetchImages);
+onMounted(fetchProjets);
 </script>
 
 <style scoped>
