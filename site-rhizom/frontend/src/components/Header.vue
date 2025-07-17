@@ -5,7 +5,7 @@
     >
       <router-link
         to="/"
-        class="text-3xl font-extrabold tracking-tight uppercase"
+        class="font-halogen text-3xl tracking-tight uppercase"
         style="letter-spacing: 0.02em; font-family: 'Inter', sans-serif"
       >
         Rhizom

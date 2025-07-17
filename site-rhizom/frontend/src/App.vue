@@ -1,17 +1,16 @@
 <template>
+  <CustomCursor />
   <DefaultLayout>
     <router-view />
   </DefaultLayout>
 </template>
 
 <script>
-import DefaultLayout from './layouts/DefaultLayout.vue'
+import DefaultLayout from "./layouts/DefaultLayout.vue";
+import CustomCursor from "./components/CustomCursor.vue";
 
 export default {
-  name: 'App',
-  components: { DefaultLayout }
-}
+  name: "App",
+  components: { DefaultLayout, CustomCursor },
+};
 </script>
-
-<style>
-</style>
