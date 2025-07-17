@@ -4,6 +4,8 @@ import Projets from "../pages/Projets/index.vue";
 import Studio from "../pages/Studio/index.vue";
 import Contact from "../pages/Contact/index.vue";
 import Admin from "../pages/Admin/index.vue";
+import MentionsLegales from "../pages/mentions-legales/MentionsLegales.vue";
+import Cookies from "../pages/cookies/Cookies.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -11,6 +13,12 @@ const routes = [
   { path: "/studio", component: Studio },
   { path: "/contact", component: Contact },
   { path: "/admin", component: Admin },
+  {
+    path: "/mentions-legales",
+    name: "MentionsLegales",
+    component: MentionsLegales,
+  },
+  { path: "/cookies", name: "Cookies", component: Cookies },
 ];
 
 const router = createRouter({

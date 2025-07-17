@@ -24,8 +24,16 @@
       <div>
         <h3 class="text-sm uppercase mb-2">Politique</h3>
         <ul class="text-xs space-y-1">
-          <li><a href="#" class="hover:underline">Politique de cookies</a></li>
-          <li><a href="#" class="hover:underline">Mentions légales</a></li>
+          <li>
+            <router-link to="/mentions-legales" class="hover:underline"
+              >Mentions légales</router-link
+            >
+          </li>
+          <li>
+            <router-link to="/cookies" class="hover:underline"
+              >Politique de cookies</router-link
+            >
+          </li>
         </ul>
       </div>
 
