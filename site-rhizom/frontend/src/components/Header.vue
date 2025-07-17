@@ -1,17 +1,22 @@
 <template>
-  <header class="w-full bg-white text-black border-b border-black/10">
-    <div class="max-w-screen-lg mx-auto px-6 py-4 flex justify-between items-center">
-      <router-link to="/" class="text-lg font-medium tracking-tight hover:opacity-80 transition">
+  <header class="fixed top-0 left-0 w-full z-50 bg-transparent">
+    <div
+      class="max-w-screen-lg mx-auto px-6 py-4 flex justify-between items-center"
+    >
+      <router-link
+        to="/"
+        class="text-3xl font-extrabold tracking-tight uppercase"
+        style="letter-spacing: 0.02em; font-family: 'Inter', sans-serif"
+      >
         Rhizom
       </router-link>
-
-      <nav class="hidden md:flex gap-6 text-sm">
+      <nav class="hidden md:flex gap-8">
         <router-link
           v-for="link in links"
           :key="link.path"
           :to="link.path"
-          class="hover:text-primary transition"
-          active-class="text-primary"
+          class="nav-link"
+          active-class="text-black"
         >
           {{ link.name }}
         </router-link>
@@ -21,15 +26,15 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-
 const links = [
-  { name: 'Projets', path: '/projets' },
-  { name: 'Studio',  path: '/studio'  },
-  { name: 'Contact', path: '/contact' }
-]
-
-onMounted(() => {
-  console.log('🧭 Header monté, links =', links)
-})
+  { name: "Projets", path: "/projets" },
+  { name: "Studio", path: "/studio" },
+  { name: "Contact", path: "/contact" },
+];
 </script>
+
+<style scoped>
+.nav-link {
+  @apply text-base font-semibold px-4 py-2 rounded transition duration-200 hover:bg-black/80 hover:text-white;
+}
+</style>
