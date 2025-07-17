@@ -7,12 +7,12 @@
       >
         <div
           v-for="(img, i) in images"
-          :key="i"
+          :key="img.id || i"
           class="flex-shrink-0 w-64 h-80 snap-start"
         >
           <img
-            :src="img"
-            :alt="`Slide ${i + 1}`"
+            :src="img.url"
+            :alt="img.title || `Slide ${i + 1}`"
             class="w-full h-full object-cover rounded"
           />
         </div>

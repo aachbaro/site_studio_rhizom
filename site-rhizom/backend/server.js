@@ -98,6 +98,6 @@ app.post("/api/projects", upload.single("image"), (req, res) => {
 // ----- Ajoute ici tes futures routes API (projects, upload, admin, etc.) -----
 
 // ----- SERVER START -----
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on port ${PORT}`);
 });

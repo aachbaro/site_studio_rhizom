@@ -18,7 +18,7 @@
       <!-- Image -->
       <div class="flex-1">
         <img
-          src="/images/home/ImageHome/Grandeimage.png"
+          src="/static/home/ImageHome/Grandeimage.png"
           alt="Grande composition florale"
           class="w-full h-auto object-cover rounded-md shadow-lg"
         />
@@ -43,7 +43,7 @@
       </router-link>
     </div>
     <div class="max-w-screen-lg mx-auto mt-16 px-4">
-      <Carousel :images="teasers" />
+      <Carousel :images="images" />
     </div>
   </section>
 </template>
@@ -52,11 +52,14 @@
 import { ref, onMounted } from "vue";
 import Carousel from "../../components/Carousel.vue";
 
-const teasers = ref([]);
+const images = ref([]);
 
+// On récupère depuis le backend
 onMounted(async () => {
-  const response = await fetch("http://localhost:3001/api/carousel");
-  teasers.value = await response.json();
+  const res = await fetch("/api/carousel");
+  const data = await res.json();
+  // On mappe pour ne garder que les chemins d’image (champ url)
+  images.value = data.map((img) => img.url);
 });
 </script>
 

@@ -1,21 +1,21 @@
 [
   {
-    "image": "/images/portraits/Nina.png",
+    "image": "/static/portraits/Nina.png",
     "name": "Nina — Designer floral",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
   },
   {
-    "image": "/images/portraits/Lucas.png",
+    "image": "/static/portraits/Lucas.png",
     "name": "Lucas — Artiste plasticien",
     "description": "Il développe une pratique sculpturale ancrée dans le vivant."
   },
   {
-    "image": "/images/portraits/Manon.png",
+    "image": "/static/portraits/Manon.png",
     "name": "Manon — Styliste botanique",
     "description": "Conçoit des arrangements à la frontière de l’art et du végétal."
   },
   {
-    "image": "/images/portraits/Amiel.png",
+    "image": "/static/portraits/Amiel.png",
     "name": "Amiel — Scénographe floral",
     "description": "Orchestre chaque composition dans l’espace comme une performance."
   }
