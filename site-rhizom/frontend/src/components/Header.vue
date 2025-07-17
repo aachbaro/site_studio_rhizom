@@ -15,7 +15,7 @@
           v-for="link in links"
           :key="link.path"
           :to="link.path"
-          class="nav-link"
+          class="inline-block border border-black rounded-full px-5 py-1 text-[10px] uppercase hover:bg-black hover:text-white transition duration-200"
           active-class="text-black"
         >
           {{ link.name }}
@@ -34,7 +34,7 @@ const links = [
 </script>
 
 <style scoped>
-.nav-link {
+/* .nav-link {
   @apply text-base font-semibold px-4 py-2 rounded transition duration-200 hover:bg-black/80 hover:text-white;
-}
+} */
 </style>
