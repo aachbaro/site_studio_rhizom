@@ -10,6 +10,8 @@ services:
       - "3001:3001"
     working_dir: /app
     command: ["node", "server.js"]
+    volumes:
+      - ./backend/data:/app/data  # <- Monte le dossier local ./backend/data dans /app/data du conteneur
 
   frontend:
     build:

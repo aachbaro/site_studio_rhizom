@@ -1,6 +1,7 @@
 FROM node:lts
 WORKDIR /app
-COPY . ./
+COPY package*.json ./
 RUN npm install --production
+COPY . ./
+RUN mkdir -p /app/data
 CMD ["node", "server.js"]
-

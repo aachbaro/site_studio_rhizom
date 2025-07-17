@@ -55,8 +55,8 @@ import Carousel from "../../components/Carousel.vue";
 const teasers = ref([]);
 
 onMounted(async () => {
-  const res = await fetch("/data/carousel.json");
-  teasers.value = await res.json();
+  const response = await fetch("http://localhost:3001/api/carousel");
+  teasers.value = await response.json();
 });
 </script>
 
