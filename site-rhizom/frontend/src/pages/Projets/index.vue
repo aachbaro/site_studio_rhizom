@@ -24,9 +24,8 @@ const projects = ref([]);
 const carouselWidth = window.innerWidth * 0.5 - 24; // 50% slide - gap
 
 onMounted(async () => {
-  // projects.json doit contenir des objets { title: string, image: "/images/projets/xxx.jpg", ... }
-  const res = await fetch("/data/projects.json");
-  projects.value = await res.json();
+  const response = await fetch("http://localhost:3001/api/projects");
+  projects.value = await response.json();
 });
 </script>
 

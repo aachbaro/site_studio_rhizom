@@ -11,6 +11,21 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
+const multer = require("multer");
+
+// Dossier de destination pour les images (ajuste selon ta structure)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/images/");
+  },
+  filename: function (req, file, cb) {
+    // Garde le nom d'origine, ou adapte si tu veux éviter les collisions
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 // ----- ROUTE EMAIL CONTACT -----
 app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
@@ -26,6 +41,8 @@ app.post("/contact", async (req, res) => {
   }
 });
 
+app.use("/images", express.static(__dirname + "/public/images"));
+
 // ----- ROUTE API CAROUSEL (BDD) -----
 app.get("/api/carousel", (req, res) => {
   try {
@@ -36,11 +53,12 @@ app.get("/api/carousel", (req, res) => {
   }
 });
 
-app.post("/api/carousel", (req, res) => {
-  const { url, title } = req.body;
-  if (!url || !title) {
-    return res.status(400).json({ error: "Missing url or title" });
+app.post("/api/carousel", upload.single("image"), (req, res) => {
+  const { title } = req.body;
+  if (!req.file || !title) {
+    return res.status(400).json({ error: "Image et titre obligatoires." });
   }
+  const url = `/images/${req.file.filename}`;
   try {
     const stmt = db.prepare(
       "INSERT INTO carousel_images (url, title) VALUES (?, ?)"
@@ -49,6 +67,31 @@ app.post("/api/carousel", (req, res) => {
     res.status(201).json({ id: info.lastInsertRowid, url, title });
   } catch (err) {
     res.status(500).json({ error: "Failed to insert image" });
+  }
+});
+
+// GET : liste tous les projets
+app.get("/api/projects", (req, res) => {
+  try {
+    const projects = db.prepare("SELECT * FROM projects").all();
+    res.json(projects);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch projects" });
+  }
+});
+
+app.post("/api/projects", upload.single("image"), (req, res) => {
+  const { title } = req.body;
+  if (!req.file || !title) {
+    return res.status(400).json({ error: "Image et titre obligatoires." });
+  }
+  const url = `/images/${req.file.filename}`;
+  try {
+    const stmt = db.prepare("INSERT INTO projects (url, title) VALUES (?, ?)");
+    const info = stmt.run(url, title);
+    res.status(201).json({ id: info.lastInsertRowid, url, title });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to insert project" });
   }
 });
 
