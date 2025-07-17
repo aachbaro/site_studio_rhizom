@@ -38,11 +38,27 @@
       <button @click="handleSubmit" class="btn">Uploader</button>
       <p v-if="uploadStatus" style="margin-top: 12px">{{ uploadStatus }}</p>
     </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div v-for="img in images" :key="img.id" class="relative group">
+        <img
+          :src="img.url"
+          :alt="img.title"
+          class="rounded shadow w-full h-48 object-cover"
+        />
+        <button
+          @click="deleteImage(img.id)"
+          class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded opacity-80 hover:opacity-100"
+        >
+          Supprimer
+        </button>
+        <div class="text-xs text-center mt-1">{{ img.title }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 // Mot de passe "admin" en dur (à améliorer côté backend ensuite)
 const password = ref("");
@@ -99,6 +115,25 @@ const handleSubmit = async () => {
     uploadStatus.value = "Erreur réseau : " + e.message;
   }
 };
+
+const deleteImage = async (id) => {
+  if (!confirm("Supprimer cette image ?")) return;
+  const res = await fetch(`/api/carousel/${id}`, { method: "DELETE" });
+  if (res.ok) {
+    images.value = images.value.filter((img) => img.id !== id);
+  } else {
+    alert("Erreur lors de la suppression !");
+  }
+};
+
+const images = ref([]);
+
+const fetchImages = async () => {
+  const res = await fetch("/api/carousel");
+  images.value = await res.json();
+};
+
+onMounted(fetchImages);
 </script>
 
 <style scoped>

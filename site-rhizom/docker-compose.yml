@@ -11,7 +11,8 @@ services:
     working_dir: /app
     command: ["node", "server.js"]
     volumes:
-      - ./backend/data:/app/data  # <- Monte le dossier local ./backend/data dans /app/data du conteneur
+      - ./backend/data:/app/data # <- Monte le dossier local ./backend/data dans /app/data du conteneur
+      - ./backend/public/images:/app/public/images
 
   frontend:
     build:

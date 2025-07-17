@@ -70,6 +70,26 @@ app.post("/api/carousel", upload.single("image"), (req, res) => {
   }
 });
 
+const fs = require("fs");
+app.delete("/api/carousel/:id", (req, res) => {
+  const id = req.params.id;
+  try {
+    const img = db.prepare("SELECT url FROM carousel_images WHERE id = ?").get(id);
+    if (!img) return res.status(404).json({ error: "Image non trouvée" });
+
+    // Supprime le fichier physique
+    const path = __dirname + "/public" + img.url;
+    if (fs.existsSync(path)) fs.unlinkSync(path);
+
+    // Supprime la ligne BDD
+    db.prepare("DELETE FROM carousel_images WHERE id = ?").run(id);
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de la suppression" });
+  }
+});
+
 // GET : liste tous les projets
 app.get("/api/projects", (req, res) => {
   try {

@@ -11,7 +11,7 @@
           class="flex-shrink-0 w-64 h-80 snap-start"
         >
           <img
-            :src="img.url"
+            :src="img"
             :alt="img.title || `Slide ${i + 1}`"
             class="w-full h-full object-cover rounded"
           />
