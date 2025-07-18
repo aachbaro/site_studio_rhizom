@@ -1,11 +1,9 @@
 <template>
   <header class="fixed top-0 left-0 w-full z-50 bg-transparent">
-    <div
-      class="max-w-screen-lg mx-auto px-6 py-4 flex justify-between items-center"
-    >
+    <div class="w-full px-6 py-6 flex justify-between items-center">
       <router-link
         to="/"
-        class="font-halogen text-3xl tracking-tight uppercase"
+        class="font-halogen text-5xl tracking-tight uppercase"
       >
         Rhizom
       </router-link>

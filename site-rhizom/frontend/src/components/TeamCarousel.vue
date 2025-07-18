@@ -2,7 +2,9 @@
   <div class="relative w-full">
     <!-- piste scrollable -->
     <div ref="track" class="overflow-hidden">
-      <div class="flex gap-6 snap-x snap-mandatory overflow-x-auto scroll-smooth">
+      <div
+        class="flex gap-6 snap-x snap-mandatory overflow-x-auto scroll-smooth"
+      >
         <div
           v-for="(member, i) in members"
           :key="i"
@@ -24,32 +26,46 @@
       @click="scroll(-1)"
       class="absolute left-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 transition"
       aria-label="Précédent"
-    >←</button>
+    >
+      ←
+    </button>
     <button
       @click="scroll(1)"
       class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 transition"
       aria-label="Suivant"
-    >→</button>
+    >
+      →
+    </button>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 const props = defineProps({
   members: {
     type: Array,
-    required: true
+    required: true,
   },
   slideWidth: {
     type: Number,
-    default: 256 + 24  // équivaut à w-64 (256px) + gap-6 (24px)
-  }
-})
+    default: 256 + 24, // équivaut à w-64 (256px) + gap-6 (24px)
+  },
+});
 
-const track = ref(null)
+const track = ref(null);
 
 function scroll(dir) {
-  track.value.scrollBy({ left: dir * props.slideWidth, behavior: 'smooth' })
+  track.value.scrollBy({ left: dir * props.slideWidth, behavior: "smooth" });
 }
 </script>
+
+<style scoped>
+.track::-webkit-scrollbar {
+  display: none;
+}
+.track {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none;
+}
+</style>

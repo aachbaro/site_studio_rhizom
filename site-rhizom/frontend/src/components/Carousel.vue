@@ -1,72 +1,101 @@
 <template>
-  <div class="relative w-full">
-    <!-- Conteneur scrollable -->
-    <div ref="track" class="overflow-hidden">
+  <div
+    class="w-screen relative left-1/2 right-1/2 -translate-x-1/2 overflow-hidden select-none"
+  >
+    <div class="overflow-hidden">
       <div
-        class="flex gap-6 snap-x snap-mandatory overflow-x-auto scroll-smooth"
+        class="carousel-track flex gap-6 min-w-max"
+        :style="{ animationDuration: `${duration}s` }"
       >
-        <div
-          v-for="(img, i) in images"
-          :key="img.id || i"
-          class="flex-shrink-0 w-64 h-80 snap-start"
-        >
-          <img
-            :src="img"
-            :alt="img.title || `Slide ${i + 1}`"
-            class="w-full h-full object-cover rounded"
-          />
-        </div>
+        <template v-for="n in 2" :key="n">
+          <div
+            v-for="(img, i) in images"
+            :key="`${n}-${img.id || i}`"
+            class="flex-shrink-0 w-96 h-[28rem] relative overflow-hidden"
+          >
+            <img
+              :src="img"
+              :alt="img.title || `Slide ${i + 1}`"
+              class="w-full h-full object-cover rounded"
+            />
+            <span
+              class="absolute inset-0 pointer-events-none noise-overlay"
+            ></span>
+          </div>
+        </template>
       </div>
     </div>
-
-    <!-- Flèches -->
-    <button
-      @click="scroll(-1)"
-      class="absolute left-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 transition"
-      aria-label="Précédent"
-    >
-      ←
-    </button>
-    <button
-      @click="scroll(1)"
-      class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 transition"
-      aria-label="Suivant"
-    >
-      →
-    </button>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
-  images: {
-    type: Array,
-    required: true,
-  },
-  /** largeur d'un slide (en px) + gap pour le scroll */
-  slideWidth: {
-    type: Number,
-    default: 256 + 24, // correspond à w-64 (256px) + gap-6 (24px)
-  },
+  images: { type: Array, required: true },
 });
 
-const track = ref(null);
+const duration = 60;
 
-/** scroll directions: -1 = gauche, +1 = droite */
-function scroll(direction) {
-  if (!track.value) return;
-  track.value.scrollBy({
-    left: direction * props.slideWidth,
-    behavior: "smooth",
-  });
+const track = ref(null);
+let autoScrollInterval = null;
+
+function getItemWidth() {
+  // Largeur + gap, adapte si besoin
+  const el = track.value?.querySelector("div");
+  return el ? el.offsetWidth + 24 : 288; // 256px + 24px gap par défaut
+}
+
+onMounted(() => {
+  function scrollStep() {
+    if (!track.value) return;
+    track.value.scrollLeft += 0.5; // vitesse douce, adapte si besoin
+
+    // Boucle infinie si passé la moitié du scroll total
+    const itemWidth = getItemWidth();
+    const totalImages = props.images.length;
+    const loopPoint = itemWidth * totalImages;
+
+    if (track.value.scrollLeft >= loopPoint) {
+      // On revient au début de la première copie sans flash
+      track.value.scrollLeft -= loopPoint;
+    }
+  }
+
+  autoScrollInterval = setInterval(scrollStep, 16); // ~60fps
+});
+
+onBeforeUnmount(() => {
+  clearInterval(autoScrollInterval);
+});
+
+// Optionnel : pause si la souris passe dessus (UX +)
+function pauseScroll() {
+  clearInterval(autoScrollInterval);
 }
 </script>
 
 <style scoped>
-/* masquage de la scrollbar si tu veux */
-.track::-webkit-scrollbar {
-  display: none;
+.carousel-track {
+  animation: scroll-x linear infinite;
+}
+@keyframes scroll-x {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.noise-overlay {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: url("/static/noise.png");
+  mix-blend-mode: screen;
+  opacity: 0.28;
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
 }
 </style>

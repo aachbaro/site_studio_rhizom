@@ -1,46 +1,47 @@
 <template>
-  <section class="py-16 bg-white">
-    <!-- 1. Flex container héro -->
+  <section class="min-h-screen flex-col bg-white flex items-center">
     <div
-      class="max-w-screen-lg mx-auto flex flex-col-reverse md:flex-row items-center gap-12"
+      class="w-full flex flex-col-reverse md:flex-row items-center justify-center"
     >
-      <!-- Texte -->
-      <div class="flex-1 text-center md:text-left">
-        <h1 class="font-halogen text-7xl font-black">STUDIO<br />RHIZOM</h1>
-        <p class="text-lg md:text-xl leading-snug">
-          De l’art. Des fleurs.<br />
-          Des poèmes qu’on ne récite pas.
-        </p>
-      </div>
-
       <!-- Image -->
-      <div class="flex-1">
+      <div class="w-full md:w-[55%] flex justify-center md:justify-end">
         <img
           src="/static/home/ImageHome/Grandeimage.png"
           alt="Grande composition florale"
-          class="w-full h-auto object-cover rounded-md shadow-lg"
+          class="w-auto h-[70vh] md:h-[100vh] object-cover shadow-lg"
         />
       </div>
-    </div>
-    <!-- ← on ferme bien ici le flex container héro -->
-
-    <!-- 2. Paragraphe descriptif + bouton (en dehors du flex) -->
-    <div class="max-w-screen-lg mx-auto text-center mt-12 px-4">
-      <p class="text-base md:text-lg leading-relaxed mb-6">
-        Chez Rhizom, chaque création est une composition vivante.<br />
-        Nous travaillons la fleur comme une matière brute, sensible, à la
-        frontière de l’art.<br />
-        Pas de recette. Pas de standard. Seulement des formes, des textures.<br />
-        Découvrez ici quelques fragments de nos projets.
-      </p>
-      <router-link
-        to="/projets"
-        class="inline-block border border-black rounded-full px-6 py-2 text-sm uppercase hover:bg-black hover:text-white transition"
+      <!-- Texte -->
+      <div
+        class="w-full md:w-[45%] flex flex-col justify-center md:justify-center md:pl-4 px-4 gap-10"
       >
-        Tous les projets
-      </router-link>
+        <h1
+          class="text-6xl md:text-8xl uppercase font-halogen font-bold mb-6 leading-tight text-center md:text-left"
+        >
+          Studio<br />
+          <span class="block md:relative md:left-[-10rem]">Rhizom</span>
+        </h1>
+        <p
+          class="text-base md:text-xl leading-relaxed mb-8 text-center md:text-left"
+        >
+          Chez Rhizom, chaque création est une composition vivante. <br />
+          Nous travaillons la fleur comme une matière brute, sensible, à la
+          frontière de l’art. Pas de recette. Pas de standard. Seulement des
+          formes, des textures.<br />
+          Découvrez ici quelques fragments de nos projets.
+        </p>
+        <router-link
+          to="/projets"
+          class="inline-block border border-black rounded-full px-6 py-2 text-base uppercase hover:bg-black hover:text-white transition md:relative"
+        >
+          tous les projets
+        </router-link>
+      </div>
     </div>
-    <div class="max-w-screen-lg mx-auto mt-16 px-4">
+    <!-- Carousel (inchangé) -->
+    <div
+      class="w-screen relative left-1/2 right-1/2 -translate-x-1/2 overflow-hidden select-none mx-auto mt-16 px-4"
+    >
       <Carousel :images="images" />
     </div>
   </section>
@@ -60,7 +61,3 @@ onMounted(async () => {
   images.value = data.map((img) => img.url);
 });
 </script>
-
-<style scoped>
-/* aucun style additionnel */
-</style>
