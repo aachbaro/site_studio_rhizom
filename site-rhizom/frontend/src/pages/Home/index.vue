@@ -6,9 +6,7 @@
     >
       <!-- Texte -->
       <div class="flex-1 text-center md:text-left">
-        <h1 class="font-halogen text-5xl md:text-7xl leading-tight mb-6">
-          STUDIO<br />RHIZOM
-        </h1>
+        <h1 class="font-halogen text-7xl font-black">STUDIO<br />RHIZOM</h1>
         <p class="text-lg md:text-xl leading-snug">
           De l’art. Des fleurs.<br />
           Des poèmes qu’on ne récite pas.

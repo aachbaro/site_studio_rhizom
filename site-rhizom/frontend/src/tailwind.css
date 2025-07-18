@@ -1,9 +1,82 @@
-/* Display - Regular */
+/* Halogen Regular */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-Regular.woff2") format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Halogen Bold */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-Bold.woff2") format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Halogen Black */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-Black.woff2") format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+/* Halogen Light */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-Light.woff2") format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+/* Halogen Medium */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-Medium.woff2") format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+/* Halogen Thin */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-Thin.woff2") format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-Thin.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+/* Halogen Italics (Regular) */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-RegularOblique.woff2")
+      format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-RegularOblique.woff") format("woff");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+/* Halogen Italics (Bold) */
+@font-face {
+  font-family: "Halogen";
+  src: url("./assets/fonts/Halogen/Halogen-BoldOblique.woff2") format("woff2"),
+    url("./assets/fonts/Halogen/Halogen-BoldOblique.woff") format("woff");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "BBPoppinsTN";
-  src: url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegular.woff2")
+  src: url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegular.woff2")
       format("woff2"),
-    url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegular.woff")
+    url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegular.woff")
       format("woff");
   font-weight: 400;
   font-style: normal;
@@ -13,9 +86,9 @@
 /* Display - Bold */
 @font-face {
   font-family: "BBPoppinsTN";
-  src: url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBold.woff2")
+  src: url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBold.woff2")
       format("woff2"),
-    url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBold.woff")
+    url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBold.woff")
       format("woff");
   font-weight: 700;
   font-style: normal;
@@ -25,9 +98,9 @@
 /* Display - SemiBold */
 @font-face {
   font-family: "BBPoppinsTN";
-  src: url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplaySemiBold.woff2")
+  src: url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplaySemiBold.woff2")
       format("woff2"),
-    url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplaySemiBold.woff")
+    url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplaySemiBold.woff")
       format("woff");
   font-weight: 600;
   font-style: normal;
@@ -37,9 +110,9 @@
 /* Display - Black */
 @font-face {
   font-family: "BBPoppinsTN";
-  src: url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBlack.woff2")
+  src: url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBlack.woff2")
       format("woff2"),
-    url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBlack.woff")
+    url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayBlack.woff")
       format("woff");
   font-weight: 900;
   font-style: normal;
@@ -49,21 +122,12 @@
 /* Display - Italic */
 @font-face {
   font-family: "BBPoppinsTN";
-  src: url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegularItalic.woff2")
+  src: url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegularItalic.woff2")
       format("woff2"),
-    url("@/assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegularItalic.woff")
+    url("./assets/fonts/BBPopinsTN/BBBPoppinsTN-DisplayRegularItalic.woff")
       format("woff");
   font-weight: 400;
   font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Halogen';
-  src: url('@/assets/fonts/Halogen/Halogen-Regular.woff2') format('woff2'),
-       url('@/assets/fonts/Halogen/Halogen-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
   font-display: swap;
 }
 
@@ -71,9 +135,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-  outline: 5px solid red !important;
-} */
+body {
+  font-family: "BBPoppinsTN", sans-serif;
+}
 
 *,
 *::before,

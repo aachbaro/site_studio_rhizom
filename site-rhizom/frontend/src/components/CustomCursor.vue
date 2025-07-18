@@ -27,7 +27,7 @@ function move(e) {
   y.value = e.clientY;
 }
 function hoverEnter() {
-  scale.value = 1.6;
+  scale.value = 1.2;
   isHovering.value = true;
 }
 function hoverLeave() {
