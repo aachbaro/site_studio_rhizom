@@ -61,33 +61,37 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { sendContact } from '../../services/api'
+import { ref } from "vue";
+import { sendContact } from "../../services/api";
 
-const nom = ref('')
-const email = ref('')
-const objet = ref('')
-const message = ref('')
-const success = ref(false)
-const error = ref('')
+const nom = ref("");
+const email = ref("");
+const objet = ref("");
+const message = ref("");
+const success = ref(false);
+const error = ref("");
 
 async function onSubmit() {
-  success.value = false
-  error.value = ''
+  success.value = false;
+  error.value = "";
   try {
-    await sendContact({
+    const res = await sendContact({
       name: nom.value,
       email: email.value,
       objet: objet.value,
-      message: message.value
-    })
-    success.value = true
-    nom.value = ''
-    email.value = ''
-    objet.value = ''
-    message.value = ''
+      message: message.value,
+    });
+    if (res && res.error) {
+      error.value = res.error;
+      return;
+    }
+    success.value = true;
+    nom.value = "";
+    email.value = "";
+    objet.value = "";
+    message.value = "";
   } catch (e) {
-    error.value = e.message || 'Une erreur est survenue'
+    error.value = e.message || "Une erreur est survenue";
   }
 }
 </script>

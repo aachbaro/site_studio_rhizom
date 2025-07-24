@@ -82,8 +82,15 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-
-const API_URL = "http://localhost:3001"; // à adapter si besoin
+import {
+  loginAdmin,
+  fetchProjects,
+  fetchCarousel,
+  addProject,
+  addCarouselImage,
+  deleteProject,
+  deleteCarouselImage,
+} from "@/services/api.js";
 
 const password = ref("");
 const isAuthenticated = ref(false);
@@ -111,23 +118,16 @@ function removeToken() {
 const handleLogin = async () => {
   loginError.value = "";
   try {
-    const res = await fetch(`${API_URL}/api/admin/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password: password.value }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
+    const data = await loginAdmin(password.value);
+    if (data.error || !data.token) {
       loginError.value = data.error || "Erreur de connexion";
       return;
     }
-    const data = await res.json();
     setToken(data.token);
     isAuthenticated.value = true;
     password.value = "";
-    // Optionnel : recharger les données admin après connexion
-    await fetchImages();
-    await fetchProjets();
+    // Recharge les listes après login
+    await fetchAll();
   } catch (err) {
     loginError.value = "Erreur réseau";
   }
@@ -148,38 +148,38 @@ const handleSubmit = async () => {
     uploadStatus.value = "Image et titre obligatoires !";
     return;
   }
-  const formData = new FormData();
-  formData.append("image", file.value);
-  formData.append("title", title.value);
-
-  let endpoint;
-  if (type.value === "carousel") {
-    endpoint = `${API_URL}/api/carousel`;
-  } else {
-    endpoint = `${API_URL}/api/projects`;
-  }
-
   try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + getToken(),
-      },
-      body: formData,
-    });
-    if (res.ok) {
+    let res;
+    if (type.value === "carousel") {
+      res = await addCarouselImage({
+        title: title.value,
+        image: file.value,
+        token: getToken(),
+      });
+    } else {
+      res = await addProject({
+        title: title.value,
+        image: file.value,
+        token: getToken(),
+      });
+    }
+
+    if (res.error) {
+      if (
+        res.error.includes("non autorisé") ||
+        res.error.includes("Token invalide") ||
+        res.error.includes("expiré")
+      ) {
+        logout();
+        uploadStatus.value = "Session expirée. Veuillez vous reconnecter.";
+        return;
+      }
+      uploadStatus.value = "Erreur : " + res.error;
+    } else {
       uploadStatus.value = "Upload réussi !";
       file.value = null;
       title.value = "";
-      // Actualise la liste
-      await fetchImages();
-      await fetchProjets();
-    } else if (res.status === 401 || res.status === 403) {
-      logout();
-      uploadStatus.value = "Session expirée. Veuillez vous reconnecter.";
-    } else {
-      const error = await res.json();
-      uploadStatus.value = "Erreur : " + (error.error || "Upload échoué");
+      await fetchAll();
     }
   } catch (e) {
     uploadStatus.value = "Erreur réseau : " + e.message;
@@ -188,15 +188,20 @@ const handleSubmit = async () => {
 
 const deleteImage = async (id) => {
   if (!confirm("Supprimer cette image ?")) return;
-  const res = await fetch(`${API_URL}/api/carousel/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: "Bearer " + getToken() },
-  });
-  if (res.ok) {
+  const res = await deleteCarouselImage({ id, token: getToken() });
+  if (res && res.success) {
     images.value = images.value.filter((img) => img.id !== id);
-  } else if (res.status === 401 || res.status === 403) {
-    logout();
-    alert("Session expirée. Veuillez vous reconnecter.");
+  } else if (res && res.error) {
+    if (
+      res.error.includes("non autorisé") ||
+      res.error.includes("Token invalide") ||
+      res.error.includes("expiré")
+    ) {
+      logout();
+      alert("Session expirée. Veuillez vous reconnecter.");
+    } else {
+      alert("Erreur lors de la suppression ! " + res.error);
+    }
   } else {
     alert("Erreur lors de la suppression !");
   }
@@ -204,33 +209,33 @@ const deleteImage = async (id) => {
 
 const deleteProjet = async (id) => {
   if (!confirm("Supprimer ce projet ?")) return;
-  const res = await fetch(`${API_URL}/api/projects/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: "Bearer " + getToken() },
-  });
-  if (res.ok) {
+  const res = await deleteProject({ id, token: getToken() });
+  if (res && res.success) {
     projets.value = projets.value.filter((p) => p.id !== id);
-  } else if (res.status === 401 || res.status === 403) {
-    logout();
-    alert("Session expirée. Veuillez vous reconnecter.");
+  } else if (res && res.error) {
+    if (
+      res.error.includes("non autorisé") ||
+      res.error.includes("Token invalide") ||
+      res.error.includes("expiré")
+    ) {
+      logout();
+      alert("Session expirée. Veuillez vous reconnecter.");
+    } else {
+      alert("Erreur lors de la suppression ! " + res.error);
+    }
   } else {
     alert("Erreur lors de la suppression !");
   }
 };
 
-const fetchImages = async () => {
-  const res = await fetch(`${API_URL}/api/carousel`);
-  images.value = await res.json();
-};
-const fetchProjets = async () => {
-  const res = await fetch(`${API_URL}/api/projects`);
-  projets.value = await res.json();
+const fetchAll = async () => {
+  images.value = await fetchCarousel();
+  projets.value = await fetchProjects();
 };
 
 onMounted(() => {
   isAuthenticated.value = !!getToken();
-  fetchImages();
-  fetchProjets();
+  fetchAll();
 });
 </script>
 

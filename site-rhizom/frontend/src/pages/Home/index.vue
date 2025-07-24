@@ -50,14 +50,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Carousel from "../../components/Carousel.vue";
+import { fetchCarousel } from "../../services/api";
 
 const images = ref([]);
 
-// On récupère depuis le backend
+// On récupère les images du backend via le service API
 onMounted(async () => {
-  const res = await fetch("/api/carousel");
-  const data = await res.json();
+  const data = await fetchCarousel();
   // On mappe pour ne garder que les chemins d’image (champ url)
-  images.value = data.map((img) => img.url);
+  images.value = (data || []).map((img) => img.url);
 });
 </script>

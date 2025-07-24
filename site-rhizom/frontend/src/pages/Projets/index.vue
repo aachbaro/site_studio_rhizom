@@ -19,13 +19,13 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import ProjectsCarousel from "../../components/ProjectsCarousel.vue";
+import { fetchProjects } from "../../services/api";
 
 const projects = ref([]);
 const carouselWidth = window.innerWidth * 0.5 - 24; // 50% slide - gap
 
 onMounted(async () => {
-  const res = await fetch("/api/projects");
-  projects.value = await res.json();
+  projects.value = await fetchProjects();
 });
 </script>
 
