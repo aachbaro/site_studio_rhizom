@@ -90,7 +90,7 @@ import {
   addCarouselImage,
   deleteProject,
   deleteCarouselImage,
-} from "@/services/api.js";
+} from "../../services/api.js";
 
 const password = ref("");
 const isAuthenticated = ref(false);
