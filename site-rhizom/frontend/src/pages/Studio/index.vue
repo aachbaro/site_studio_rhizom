@@ -1,8 +1,8 @@
 <template>
-  <section class="py-16 bg-white">
+  <section class="mt-1 py-16 bg-white">
     <!-- 1. Intro text -->
-    <div class="max-w-screen-lg mx-auto px-4">
-      <p class="text-base leading-relaxed mb-6">
+    <div class="max-w-screen-xl px-1 mx-auto">
+      <p class="text-lg md:text-1xl leading-relaxed mb-8 max-w-4xl">
         Nous sommes quatre — quatre personnalités, quatre parcours, une vision
         commune.<br />
         Notre travail naît de ce dialogue à plusieurs voix, où s’entrelacent
@@ -10,26 +10,31 @@
         À travers chaque projet, nous cherchons à créer des formes justes,
         sensibles, en lien avec l’espace et le vivant.
       </p>
-      <h2 class="font-halogen text-4xl md:text-5xl leading-tight mb-8">
-        Quatre personnalités.<br />
-        Quatre regards.
+      <h2
+        class="text-4xl md:text-5xl leading-tight mb-8 max-w-4xl mx-auto text-right self-start md:pl-16"
+      >
+        Quatre personnalités<br />
+        Quatre talents
       </h2>
     </div>
 
     <!-- Carrousel d’équipe -->
-    <div class="max-w-screen-lg mx-auto mt-8 px-4">
+    <div
+      class="w-screen px-4 md:px-16 relative left-1/2 right-1/2 -translate-x-1/2 mt-8"
+    >
       <TeamCarousel :members="team" />
     </div>
   </section>
 
   <!-- 3. Quatre esprits. Un seul but. -->
-  <section class="py-16 bg-white">
-    <div class="max-w-screen-lg mx-auto px-4 grid md:grid-cols-2 gap-12">
+  <!-- Bloc 1 -->
+  <section class="bg-white">
+    <div
+      class="max-w-screen-xl min-h-screen mx-auto px-4 grid md:grid-cols-2 gap-12 items-center"
+    >
       <div>
-        <h3 class="font-halogen text-3xl md:text-4xl mb-6">
-          Quatre esprits. Un seul but.
-        </h3>
-        <p class="text-base leading-relaxed">
+        <h3 class="text-3xl md:text-4xl mb-6">Quatre esprits. Un seul but.</h3>
+        <p class="text-xl md:text-2xl leading-relaxed">
           Nous proposons un service global de direction artistique et de
           production événementielle, pensé comme une extension de cette
           approche.<br />
@@ -39,33 +44,33 @@
           étape avec précision et intuition.
         </p>
       </div>
-      <!-- <div>
+      <div class="h-full w-full flex items-stretch">
         <img
-          src="/images/home/studio/graphic-1.jpg"
+          src="/static/studio/photo-studio-page.png"
           alt=""
-          class="w-full h-auto object-cover rounded-md shadow"
+          class="w-full h-full object-cover shadow rounded-md "
+          style="min-height: 300px"
         />
-      </div> -->
+      </div>
     </div>
   </section>
 
-  <!-- 4. Du vivant. Du local. -->
-  <section class="py-16 bg-white">
+  <!-- Bloc 2 -->
+  <section class="bg-white">
     <div
-      class="max-w-screen-lg mx-auto px-4 grid md:grid-cols-2 gap-12 items-center"
+      class="max-w-screen-xl min-h-screen mx-auto px-4 grid md:grid-cols-2 gap-12 items-center"
     >
-      <!-- <div>
+      <div class="h-full w-full flex items-stretch">
         <img
-          src="/images/home/studio/graphic-2.jpg"
+          src="/static/studio/photo-studio-page.png"
           alt=""
-          class="w-full h-auto object-cover rounded-md shadow"
+          class="w-full h-full object-cover shadow rounded-md"
+          style="min-height: 300px"
         />
-      </div> -->
+      </div>
       <div>
-        <h3 class="font-halogen text-3xl md:text-4xl mb-6">
-          Du vivant. Du local.
-        </h3>
-        <p class="text-base leading-relaxed">
+        <h3 class="text-3xl md:text-4xl mb-6">Du vivant. Du Local.</h3>
+        <p class="text-xl md:text-2xl leading-relaxed">
           Nous travaillons le végétal avec attention, en choisissant chaque
           variété pour sa présence, sa tenue et sa capacité à dialoguer avec
           l’espace.<br />

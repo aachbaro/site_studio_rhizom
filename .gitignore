@@ -23,3 +23,25 @@ yarn-error.log*
 *.jpeg
 *.png
 *.gif
+
+# Dossier contenant toutes les dépendances Composer (inutile sur Git)
+api/vendor/
+vendor/
+
+# Fichier de config avec tes secrets (très important, ne jamais publier !)
+api/config.php
+
+
+
+# Fichiers contenant des mots de passe, secrets, etc. (au cas où tu en ajoutes d'autres)
+*.env
+.env
+
+# Dossier où tu mets les images uploadées par les admins
+uploads/
+
+# (Optionnel) Fichiers temporaires, logs, backup, etc.
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

@@ -3,39 +3,23 @@
     <!-- piste scrollable -->
     <div ref="track" class="overflow-hidden">
       <div
-        class="flex gap-6 snap-x snap-mandatory overflow-x-auto scroll-smooth"
+        class="flex gap-12 snap-x snap-mandatory overflow-x-auto scroll-smooth track"
       >
         <div
           v-for="(member, i) in members"
           :key="i"
-          class="flex-shrink-0 w-64 snap-start"
+          class="flex-shrink-0 max-w-[90vw] snap-start"
         >
           <img
             :src="member.image"
             :alt="member.name"
-            class="w-full h-80 object-cover rounded-md"
+            class="w-full h-[48rem] max-h-[90vh] object-cover"
           />
-          <h4 class="mt-3 font-halogen text-lg">{{ member.name }}</h4>
-          <p class="text-sm leading-snug">{{ member.description }}</p>
+          <!-- <h4 class="font-halogen text-3xl">{{ member.name }}</h4> -->
+          <p class="mt-8 text-xl leading-snug">{{ member.description }}</p>
         </div>
       </div>
     </div>
-
-    <!-- flèches -->
-    <button
-      @click="scroll(-1)"
-      class="absolute left-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 transition"
-      aria-label="Précédent"
-    >
-      ←
-    </button>
-    <button
-      @click="scroll(1)"
-      class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 transition"
-      aria-label="Suivant"
-    >
-      →
-    </button>
   </div>
 </template>
 
@@ -54,10 +38,6 @@ const props = defineProps({
 });
 
 const track = ref(null);
-
-function scroll(dir) {
-  track.value.scrollBy({ left: dir * props.slideWidth, behavior: "smooth" });
-}
 </script>
 
 <style scoped>

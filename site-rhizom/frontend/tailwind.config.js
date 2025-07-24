@@ -9,7 +9,7 @@ module.exports = {
         primary: "#00FF99",
       },
       fontFamily: {
-        poppins: ["BBPoppinsTN", "sans-serif"],
+        poppins: ["Arial", "sans-serif"],
         halogen: ["Halogen", "sans-serif"],
       },
     },
