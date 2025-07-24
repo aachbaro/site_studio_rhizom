@@ -111,7 +111,7 @@ function removeToken() {
 const handleLogin = async () => {
   loginError.value = "";
   try {
-    const res = await fetch(`${API_URL}/api/login.php`, {
+    const res = await fetch(`${API_URL}/api/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password: password.value }),
@@ -154,9 +154,9 @@ const handleSubmit = async () => {
 
   let endpoint;
   if (type.value === "carousel") {
-    endpoint = `${API_URL}/api/carousel.php`;
+    endpoint = `${API_URL}/api/carousel`;
   } else {
-    endpoint = `${API_URL}/api/projects.php`;
+    endpoint = `${API_URL}/api/projects`;
   }
 
   try {
