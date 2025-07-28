@@ -8,7 +8,7 @@ require_once 'vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-// Middleware JWT pour sécuriser POST/DELETE
+// --- Auth admin ---
 function requireAdminAuth() {
     $headers = getallheaders();
     $auth = $headers['Authorization'] ?? $headers['authorization'] ?? '';
@@ -28,7 +28,7 @@ function requireAdminAuth() {
     }
 }
 
-// Connexion à la BDD
+// --- Connexion BDD ---
 try {
     $pdo = new PDO(
         "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8",
@@ -42,11 +42,16 @@ try {
     exit;
 }
 
-// ---- GET : Liste des projets ----
+// --- GET projets ---
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $stmt = $pdo->query("SELECT * FROM projects");
         $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($projects as &$proj) {
+            $proj['url'] = '/uploads/' . $proj['url'];
+        }
+
         echo json_encode($projects);
     } catch (PDOException $e) {
         http_response_code(500);
@@ -55,17 +60,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
+// --- POST projet ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireAdminAuth();
 
-    if (!isset($_POST['title'], $_POST['description']) || !isset($_FILES['image'])) {
+    if (!isset($_POST['title']) || !isset($_FILES['image'])) {
         http_response_code(400);
         echo json_encode(['error' => 'Champs manquants']);
         exit;
     }
 
     $title = $_POST['title'];
-    $description = $_POST['description'];
     $image = $_FILES['image'];
 
     $targetDir = __DIR__ . '/../uploads/';
@@ -74,26 +79,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!move_uploaded_file($image['tmp_name'], $targetFile)) {
         http_response_code(500);
-        echo json_encode(['error' => 'Échec du téléchargement de l’image']);
+        echo json_encode(['error' => 'Échec du téléchargement']);
         exit;
     }
 
-    $stmt = $pdo->prepare("INSERT INTO projects (title, description, image) VALUES (?, ?, ?)");
-    $stmt->execute([$title, $description, $filename]);
+    $stmt = $pdo->prepare("INSERT INTO projects (title, url) VALUES (?, ?)");
+    $stmt->execute([$title, $filename]);
 
+    ob_clean();
     echo json_encode(['success' => true]);
+    exit;
 }
 
-// ---- DELETE : Supprimer un projet (admin) ----
+// --- DELETE projet ---
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     requireAdminAuth();
 
-    // Récupère l'id du projet à supprimer (via ?id=xxx ou body JSON)
     $id = $_GET['id'] ?? null;
     if (!$id && $_SERVER['CONTENT_TYPE'] === 'application/json') {
         $data = json_decode(file_get_contents('php://input'), true);
         $id = $data['id'] ?? null;
     }
+
     if (!$id) {
         http_response_code(400);
         echo json_encode(['error' => "ID manquant"]);
@@ -101,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     }
 
     try {
-        // Récupère le chemin de l'image à supprimer
         $stmt = $pdo->prepare("SELECT url FROM projects WHERE id = ?");
         $stmt->execute([$id]);
         $proj = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -110,13 +116,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             echo json_encode(['error' => "Projet non trouvé"]);
             exit;
         }
-        // Supprime le fichier image
-        $imgPath = __DIR__ . '/../' . ltrim($proj['url'], '/');
+
+        $imgPath = __DIR__ . '/../uploads/' . ltrim($proj['url'], '/');
         if (file_exists($imgPath)) unlink($imgPath);
 
-        // Supprime la ligne en base
         $stmt = $pdo->prepare("DELETE FROM projects WHERE id = ?");
         $stmt->execute([$id]);
+
         echo json_encode(['success' => true]);
     } catch (PDOException $e) {
         http_response_code(500);
@@ -125,6 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     exit;
 }
 
-// ---- Méthode non autorisée ----
+// --- fallback ---
 http_response_code(405);
 echo json_encode(['error' => 'Méthode non autorisée']);

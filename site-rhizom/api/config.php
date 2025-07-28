@@ -17,7 +17,7 @@ define('SMTP_PORT', 465);
 define('SMTP_USER', 'adam.achbarou@gmail.com');
 // L’email utilisé pour envoyer (ex: precontact@studiorhizom.com)
 define('SMTP_PASS', 'wxinajmwpmdoizrg');
-define('DEST_EMAIL', 'contact@studiorhizom.com'); // Destinataire des messages de contact
+define('DEST_EMAIL', 'adam.achbarou@gmail.com'); // Destinataire des messages de contact
 
 // Hash de mot de passe admin (si tu fais la vérification par hash)
 define('ADMIN_PASSWORD_HASH', '$2b$10$aiXXNuS/3crb2uYsO.TCgu.cPUDqa3uqN0MVPRsSJhLf.6bSb6b9q');
