@@ -1,9 +1,14 @@
 <?php
 // api/config.php
 
-define('DB_HOST', 'studiltdb.mysql.db');
-define('DB_USER', 'studiltdbuser');
-define('DB_PASS', 'RhizomDetre93');
+// define('DB_HOST', 'studiltdb.mysql.db');
+// define('DB_USER', 'studiltdbuser');
+// define('DB_PASS', 'RhizomDetre93');
+// define('DB_NAME', 'studiltdbuser');
+
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', ''); // (vide sur WAMP)
 define('DB_NAME', 'studiltdbuser');
 
 // --- SMTP (pour PHPMailer par exemple) ---

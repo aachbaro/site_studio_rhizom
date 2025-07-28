@@ -55,41 +55,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// ---- POST : Ajouter un projet (admin) ----
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireAdminAuth();
 
-    if (!isset($_POST['title']) || empty($_FILES['image'])) {
+    if (!isset($_POST['title'], $_POST['description']) || !isset($_FILES['image'])) {
         http_response_code(400);
-        echo json_encode(['error' => "Image et titre obligatoires."]);
+        echo json_encode(['error' => 'Champs manquants']);
         exit;
     }
 
-    $title = trim($_POST['title']);
-    $uploadDir = __DIR__ . '/../uploads/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0775, true);
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $image = $_FILES['image'];
 
-    $filename = time() . '-' . basename($_FILES['image']['name']);
-    $targetFile = $uploadDir . $filename;
+    $targetDir = __DIR__ . '/../uploads/';
+    $filename = uniqid() . '_' . basename($image['name']);
+    $targetFile = $targetDir . $filename;
 
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
+    if (!move_uploaded_file($image['tmp_name'], $targetFile)) {
         http_response_code(500);
-        echo json_encode(['error' => "Échec de l'upload"]);
+        echo json_encode(['error' => 'Échec du téléchargement de l’image']);
         exit;
     }
-    $url = '/uploads/' . $filename;
 
-    // Insertion en base
-    try {
-        $stmt = $pdo->prepare("INSERT INTO projects (url, title) VALUES (?, ?)");
-        $stmt->execute([$url, $title]);
-        $id = $pdo->lastInsertId();
-        echo json_encode(['id' => $id, 'url' => $url, 'title' => $title]);
-    } catch (PDOException $e) {
-        http_response_code(500);
-        echo json_encode(['error' => "Erreur lors de l'ajout à la base"]);
-    }
-    exit;
+    $stmt = $pdo->prepare("INSERT INTO projects (title, description, image) VALUES (?, ?, ?)");
+    $stmt->execute([$title, $description, $filename]);
+
+    echo json_encode(['success' => true]);
 }
 
 // ---- DELETE : Supprimer un projet (admin) ----

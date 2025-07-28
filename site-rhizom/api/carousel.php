@@ -47,6 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {
         $stmt = $pdo->query("SELECT * FROM carousel_images");
         $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($images as &$img) {
+            $img['url'] = '/uploads/' . $img['url']; // ou ajoute directement l'URL complète ici
+        }
+
         echo json_encode($images);
     } catch (PDOException $e) {
         http_response_code(500);
@@ -55,41 +60,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// ---- POST : Upload image carousel (admin) ----
+// ---- POST : Ajouter une image au carousel (admin) ----
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireAdminAuth();
 
-    if (!isset($_POST['title']) || empty($_FILES['image'])) {
+    if (!isset($_FILES['image'])) {
         http_response_code(400);
-        echo json_encode(['error' => "Image et titre obligatoires."]);
+        echo json_encode(['error' => 'Image manquante']);
         exit;
     }
 
-    $title = trim($_POST['title']);
-    $uploadDir = __DIR__ . '/../uploads/';
-    if (!is_dir($uploadDir)) mkdir($uploadDir, 0775, true);
-
-    $filename = time() . '-' . basename($_FILES['image']['name']);
-    $targetFile = $uploadDir . $filename;
-
-    if (!move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-        http_response_code(500);
-        echo json_encode(['error' => "Échec de l'upload"]);
-        exit;
-    }
-    $url = '/uploads/' . $filename;
-
-    // Insertion en base
-    try {
-        $stmt = $pdo->prepare("INSERT INTO carousel_images (url, title) VALUES (?, ?)");
-        $stmt->execute([$url, $title]);
-        $id = $pdo->lastInsertId();
-        echo json_encode(['id' => $id, 'url' => $url, 'title' => $title]);
-    } catch (PDOException $e) {
-        http_response_code(500);
-        echo json_encode(['error' => "Erreur lors de l'ajout à la base"]);
-    }
+    $image = $_FILES['image'];
+    $targetDir = __DIR__ . '/../uploads/';
+    $filename = uniqid() . '_' . basename($image['name']);
+    $targetFile = $targetDir . $filename;
+if (!move_uploaded_file($image['tmp_name'], $targetFile)) {
+    http_response_code(500);
+    echo json_encode([
+        'error' => 'Échec du téléchargement',
+        'debug' => [
+            'tmp_name' => $image['tmp_name'],
+            'targetFile' => $targetFile,
+            'is_uploaded_file' => is_uploaded_file($image['tmp_name']),
+            'file_exists_tmp' => file_exists($image['tmp_name']),
+            'writable_target_dir' => is_writable($targetDir),
+        ]
+    ]);
     exit;
+}
+
+$stmt = $pdo->prepare("INSERT INTO carousel_images (url) VALUES (?)");
+$stmt->execute([$filename]);
+ob_clean();
+echo json_encode(['success' => true]);
+exit;
 }
 
 // ---- DELETE : Supprimer une image (admin) ----
