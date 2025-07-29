@@ -4,10 +4,8 @@
   >
     <section id="team" class="min-h-screen snap-start bg-white mb-[2rem] py-24">
       <!-- 1. Intro text -->
-      <div class="max-w-screen-xl px-1 mx-auto pt-24 md:pt-26">
-        <p
-          class="text-lg md:text-1xl leading-relaxed mb-8 max-w-4xl font-[550]"
-        >
+      <div class="max-w-screen-xl px-1 mx-auto pt-12 md:pt-26">
+        <p class="text-lg md:text-1xl leading-relaxed mb-8 max-w-4xl pl-9">
           Nous sommes quatre — quatre personnalités, quatre parcours, une vision
           commune.<br />
           Notre travail naît de ce dialogue à plusieurs voix, où s’entrelacent
@@ -40,7 +38,7 @@
           </h3>
 
           <p
-            class="text-xl md:text-2xl leading-relaxed font-[550] max-w-3xl justify-self-end px-4"
+            class="text-xl md:text-2xl leading-relaxed max-w-3xl justify-self-end px-4"
           >
             Nous proposons un service global de direction artistique et de
             production événementielle, pensé comme une extension de cette
@@ -79,9 +77,7 @@
           >
             Notre engagement, la fleur locale
           </h3>
-          <p
-            class="text-xl md:text-2xl leading-relaxed font-[550] max-w-3xl px-4"
-          >
+          <p class="text-xl md:text-2xl leading-relaxed max-w-3xl px-4">
             Nous travaillons le végétal avec attention, en choisissant chaque
             variété pour sa présence, sa tenue et sa capacité à dialoguer avec
             l’espace.<br />
