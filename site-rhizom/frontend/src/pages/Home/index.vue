@@ -32,7 +32,7 @@
         </p>
         <router-link
           to="/projets"
-          class="w-fit self-center md:self-start inline-block border border-black rounded-full px-6 py-2 text-base hover:bg-black hover:text-white transition md:relative"
+          class="w-fit mb-8 self-center md:self-start inline-block border border-black rounded-full px-6 py-2 text-base hover:bg-black hover:text-white transition md:relative"
         >
           tous les projets
         </router-link>
