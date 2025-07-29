@@ -32,16 +32,14 @@
         </p>
         <router-link
           to="/projets"
-          class="inline-block border border-black rounded-full px-6 py-2 text-base uppercase hover:bg-black hover:text-white transition md:relative"
+          class="w-fit self-center md:self-start inline-block border border-black rounded-full px-6 py-2 text-base hover:bg-black hover:text-white transition md:relative"
         >
           tous les projets
         </router-link>
       </div>
     </div>
     <!-- Carousel (inchangé) -->
-    <div
-      class="w-screen relative left-1/2 right-1/2 -translate-x-1/2 overflow-hidden select-none mx-auto mt-16 px-4"
-    >
+    <div class="w-full overflow-hidden px-4 mt-16 select-none mx-auto">
       <Carousel :images="images" />
     </div>
   </section>

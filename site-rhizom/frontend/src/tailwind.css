@@ -134,11 +134,24 @@
 @tailwind utilities;
 
 body {
-  font-family: "BBPoppinsTN", sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 *,
 *::before,
 *::after {
   cursor: none !important;
+}
+
+@layer base {
+  /* Empêche le scroll pendant la splash vidéo */
+  html,
+  body {
+    overflow: hidden;
+  }
+
+  /* Quand la splash est terminée, on rend à nouveau le scroll */
+  body.splash-ended {
+    overflow: auto;
+  }
 }

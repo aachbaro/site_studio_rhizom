@@ -1,16 +1,7 @@
 <template>
-  <section class="py-16 bg-white">
-    <!-- Intro texte -->
-    <div class="max-w-screen-lg mx-auto px-4 text-center md:text-left mb-12">
-      <p class="text-lg leading-relaxed">
-        Voici un aperçu de nos diverses compositions.<br />
-        Créées pour des événements, des maisons, des moments singuliers.<br />
-        Chaque projet est un dialogue entre fleurs, espace et émotion.
-      </p>
-    </div>
-
+  <section class="h-screen w-full bg-white flex items-center">
     <!-- Carousel des projets -->
-    <div class="max-w-screen-lg mx-auto px-4">
+    <div class="w-full h-full overflow-hidden">
       <ProjectsCarousel :projects="projects" :slideWidth="carouselWidth" />
     </div>
   </section>
@@ -22,13 +13,9 @@ import ProjectsCarousel from "../../components/ProjectsCarousel.vue";
 import { fetchProjects } from "../../services/api";
 
 const projects = ref([]);
-const carouselWidth = window.innerWidth * 0.5 - 24; // 50% slide - gap
+const carouselWidth = window.innerWidth / projects.value.length;
 
 onMounted(async () => {
   projects.value = await fetchProjects();
 });
 </script>
-
-<style scoped>
-/* pas de style additionnel pour l’instant */
-</style>

@@ -1,5 +1,7 @@
 <template>
-  <div class="container mx-auto py-12 px-4 max-w-3xl">
+  <div
+    class="max-w-screen-xl mx-auto px-6 py-24 md:px-12 flex flex-col items-start"
+  >
     <h1 class="text-3xl font-bold mb-8">Mentions légales</h1>
 
     <h2 class="text-xl font-semibold mt-8 mb-2">Éditeur du site</h2>
@@ -56,3 +58,10 @@
     </p>
   </div>
 </template>
+
+<style scoped>
+a {
+  color: black;
+  /* text-decoration: none; */
+}
+</style>

@@ -1,5 +1,8 @@
 <template>
-  <div class="container mx-auto py-12 px-4 max-w-3xl">
+  <!-- <div class="container mx-auto py-12 px-4 max-w-3xl"> -->
+    <div
+      class="max-w-screen-xl mx-auto px-6 py-24 md:px-12 flex flex-col items-start"
+    >
     <h1 class="text-3xl font-bold mb-8">Politique de cookies</h1>
     <p class="mb-6">
       Lors de votre navigation sur le site de Studio Rhizom, des cookies peuvent
@@ -58,3 +61,10 @@
     </p>
   </div>
 </template>
+
+<style scoped>
+a {
+  color: black;
+  /* text-decoration: none; */
+}
+</style>

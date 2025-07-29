@@ -1,8 +1,10 @@
 <template>
   <section class="py-16 bg-white">
-    <div class="max-w-screen-lg mx-auto px-4 flex flex-col items-center">
+    <div
+      class="max-w-screen-xl mx-auto px-6 py-24 md:px-12 flex flex-col items-start"
+    >
       <!-- 1. Intro texte -->
-      <div class="w-full md:w-3/4 text-center mb-12">
+      <div class="w-full md:w-3/4 text-left mb-115">
         <p class="text-lg leading-relaxed">
           Une envie, un projet, une question ?<br />
           Parlez-nous de votre idée,<br />
@@ -12,13 +14,13 @@
 
       <!-- 2. Formulaire -->
       <form
-        class="w-full md:w-3/4 grid grid-cols-1 gap-6"
+        class="w-full md:w-3/4 grid grid-cols-1 gap-6 py-24"
         @submit.prevent="onSubmit"
       >
         <input
           type="text"
           name="nom"
-          placeholder="Nom"
+          placeholder="nom"
           v-model="nom"
           required
           class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
@@ -26,7 +28,7 @@
         <input
           type="email"
           name="email"
-          placeholder="E-mail"
+          placeholder="e-mail"
           v-model="email"
           required
           class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
@@ -34,7 +36,7 @@
         <input
           type="text"
           name="objet"
-          placeholder="Objet"
+          placeholder="objet"
           v-model="objet"
           required
           class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
@@ -42,14 +44,14 @@
         <textarea
           name="message"
           rows="8"
-          placeholder="Message"
+          placeholder="message"
           v-model="message"
           required
           class="w-full border border-black rounded-2xl px-6 py-4 placeholder-black/50 focus:outline-none resize-none"
         ></textarea>
         <button
           type="submit"
-          class="self-start border border-black rounded-full px-8 py-2 text-sm uppercase hover:bg-black hover:text-white transition"
+          class="w-fit border border-black rounded-full px-8 py-2 text-sm lowercase hover:bg-black hover:text-white transition"
         >
           envoyer
         </button>

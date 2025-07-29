@@ -1,22 +1,22 @@
 <template>
   <div class="relative w-full">
-    <!-- piste scrollable -->
-    <div ref="track" class="overflow-hidden">
+    <div ref="track" class="overflow-x-auto md:overflow-x-hidden">
       <div
-        class="flex gap-12 snap-x snap-mandatory overflow-x-auto scroll-smooth track"
+        class="flex gap-6 md:gap-0 snap-x snap-mandatory scroll-smooth track w-fit md:w-full"
       >
         <div
           v-for="(member, i) in members"
           :key="i"
-          class="flex-shrink-0 max-w-[90vw] snap-start"
+          class="flex-shrink-0 snap-start w-[90vw] md:w-1/4 px-1 flex flex-col items-start"
         >
           <img
             :src="member.image"
             :alt="member.name"
-            class="w-full h-[48rem] max-h-[90vh] object-cover"
+            class="w-full object-contain"
           />
-          <!-- <h4 class="font-halogen text-3xl">{{ member.name }}</h4> -->
-          <p class="mt-8 text-xl leading-snug">{{ member.description }}</p>
+          <p class="mt-8 text-xl leading-snug">
+            {{ member.description }}
+          </p>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@
           v-for="link in links"
           :key="link.path"
           :to="link.path"
-          class="inline-block border border-black rounded-full px-5 py-1 text-[10px] uppercase hover:bg-black hover:text-white transition duration-200"
+          class="flex items-center justify-center border border-black rounded-full px-5 h-8 text-xs lowercase leading-none hover:bg-black hover:text-white transition duration-200"
           active-class="text-black"
         >
           {{ link.name }}

@@ -1,26 +1,24 @@
 <template>
-  <div class="relative w-full">
+  <div class="relative w-full h-screen">
     <!-- Piste scrollable -->
-    <div ref="track" class="overflow-hidden">
+    <div
+      ref="track"
+      class="overflow-x-auto scroll-smooth snap-x snap-mandatory h-full flex hide-scrollbar"
+    >
       <div
-        class="flex gap-6 snap-x snap-mandatory overflow-x-auto scroll-smooth"
+        v-for="(p, i) in projects"
+        :key="i"
+        class="flex-shrink-0 snap-start h-full flex items-center justify-center relative overflow-hidden"
+        :style="{ width: slideWidth + 'px' }"
       >
+        <img :src="p.url" :alt="p.title" class="h-full w-auto object-contain" />
+        <!-- Overlay titre -->
         <div
-          v-for="(p, i) in projects"
-          :key="i"
-          class="flex-shrink-0 w-[calc(50%-1.5rem)] snap-start relative"
+          class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition flex items-center justify-center"
         >
-          <img
-            :src="p.url"
-            :alt="p.title"
-            class="w-full h-auto object-cover rounded-md"
-          />
-          <!-- Overlay titre au survol -->
-          <div
-            class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition flex items-center justify-center rounded-md"
-          >
-            <span class="text-white font-halogen text-3xl">{{ p.title }}</span>
-          </div>
+          <span class="text-white font-halogen text-3xl text-center">{{
+            p.title
+          }}</span>
         </div>
       </div>
     </div>
@@ -28,14 +26,14 @@
     <!-- Flèches -->
     <button
       @click="scroll(-1)"
-      class="absolute left-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 p-2"
+      class="absolute left-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 p-2 z-10"
       aria-label="Précédent"
     >
       ←
     </button>
     <button
       @click="scroll(1)"
-      class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 p-2"
+      class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xl opacity-60 hover:opacity-100 p-2 z-10"
       aria-label="Suivant"
     >
       →
@@ -44,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 const props = defineProps({
   projects: {
     type: Array,
@@ -58,18 +56,26 @@ const props = defineProps({
 });
 
 const track = ref(null);
-function scroll(dir) {
+const scroll = (dir) => {
   if (!track.value) return;
-  track.value.scrollBy({
-    left: dir * props.slideWidth,
+  const container = track.value;
+  const slide = container.querySelector("div.snap-start");
+  if (!slide) return;
+
+  const slideWidth = slide.clientWidth + 2; // 2 = gap-[2px]
+  container.scrollBy({
+    left: dir * slideWidth,
     behavior: "smooth",
   });
-}
+};
 </script>
 
 <style scoped>
-/* tu peux masquer la scrollbar si tu veux */
-.track::-webkit-scrollbar {
+.hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
 }
 </style>
