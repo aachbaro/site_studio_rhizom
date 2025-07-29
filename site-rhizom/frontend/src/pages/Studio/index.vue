@@ -31,17 +31,17 @@
     <!-- 3. Quatre esprits. Un seul but. -->
     <!-- Bloc 1 -->
     <section id="esprits" class="h-screen snap-start bg-white">
-      <div
-        class="max-w-screen-xl min-h-screen mx-auto px-4 grid md:grid-cols-2 gap-12 items-center"
-      >
+      <div class="mx-auto px-4 grid md:grid-cols-2 items-center h-screen">
         <div>
           <h3
-            class="text-3xl md:text-4xl mb-[10rem] uppercase font-bold md:relative md:left-[10rem]"
+            class="text-3xl md:text-4xl mb-[10rem] uppercase font-bold md:relative md:left-[10rem] justify-self-end whitespace-nowrap"
           >
             Notre démarche artistique
           </h3>
 
-          <p class="text-xl md:text-2xl leading-relaxed font-[550]">
+          <p
+            class="text-xl md:text-2xl leading-relaxed font-[550] max-w-3xl justify-self-end px-4"
+          >
             Nous proposons un service global de direction artistique et de
             production événementielle, pensé comme une extension de cette
             approche.<br />
@@ -54,8 +54,8 @@
         <div class="h-full w-full flex items-stretch">
           <img
             src="/static/studio/photo-studio-page.jpg"
-            alt=""
-            class="w-full h-full object-contain shadow"
+            alt="Notre démarche artistique"
+            class="w-full h-full object-cover shadow h-screen"
             style="min-height: 300px"
           />
         </div>
@@ -64,14 +64,12 @@
 
     <!-- Bloc 2 -->
     <section id="vivant" class="h-screen snap-start bg-white">
-      <div
-        class="max-w-screen-xl min-h-screen mx-auto px-4 grid md:grid-cols-2 gap-12 items-center"
-      >
+      <div class="mx-auto grid md:grid-cols-2 items-center h-screen">
         <div class="h-full w-full flex items-stretch">
           <img
             src="/static/studio/photo-studio-page.jpg"
             alt=""
-            class="w-full h-full object-cover shadow rounded-md"
+            class="w-full h-full object-cover shadow h-screen"
             style="min-height: 300px"
           />
         </div>
@@ -81,7 +79,9 @@
           >
             Notre engagement, la fleur locale
           </h3>
-          <p class="text-xl md:text-2xl leading-relaxed font-[550]">
+          <p
+            class="text-xl md:text-2xl leading-relaxed font-[550] max-w-3xl px-4"
+          >
             Nous travaillons le végétal avec attention, en choisissant chaque
             variété pour sa présence, sa tenue et sa capacité à dialoguer avec
             l’espace.<br />

@@ -91,6 +91,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+// ---- PUT : Modifier le titre d'un projet (admin) ----
+if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+    requireAdminAuth();
+
+    // On lit le JSON envoyé
+    $data = json_decode(file_get_contents('php://input'), true);
+    $id = $data['id'] ?? null;
+    $title = trim($data['title'] ?? '');
+
+    if (!$id || $title === '') {
+        http_response_code(400);
+        echo json_encode(['error' => 'ID et titre obligatoires']);
+        exit;
+    }
+
+    try {
+        // Met à jour le titre
+        $stmt = $pdo->prepare("UPDATE projects SET title = ? WHERE id = ?");
+        $stmt->execute([$title, $id]);
+        echo json_encode(['success' => true]);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erreur lors de la mise à jour']);
+    }
+    exit;
+}
+
 // --- DELETE projet ---
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     requireAdminAuth();

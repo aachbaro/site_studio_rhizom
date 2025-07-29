@@ -24,6 +24,18 @@ export async function addProject({ title, image, token }) {
   return await res.json();
 }
 
+export async function updateProject({ id, title, token }) {
+  const res = await fetch(`${API_URL}/api/projects.php`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id, title }),
+  });
+  return await res.json();
+}
+
 export async function deleteProject({ id, token }) {
   const res = await fetch(`${API_URL}/api/projects.php?id=${id}`, {
     method: "DELETE",
@@ -43,7 +55,6 @@ export async function fetchCarousel() {
 
 export async function addCarouselImage({ title, image, token }) {
   const formData = new FormData();
-  formData.append("title", title);
   formData.append("image", image);
 
   const res = await fetch(`${API_URL}/api/carousel.php`, {
