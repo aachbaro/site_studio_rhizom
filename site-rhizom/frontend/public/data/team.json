@@ -1,22 +1,22 @@
 [
   {
     "image": "/static/portraits/Nina.png",
-    "name": "Nina — Designer floral",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    "name": " — Designer floral",
+    "description": "— NINA — Lorem ipsum dolor sit amet, consectetur adipiscing elit."
   },
   {
     "image": "/static/portraits/Lucas.png",
     "name": "Lucas — Artiste plasticien",
-    "description": "Il développe une pratique sculpturale ancrée dans le vivant."
+    "description": "— LUCAS — Artiste plasticien, il développe une pratique sculpturale ancrée dans le vivant. Au sein de Rhizom, il pense la fleur comme un volume, un geste, une forme à habiter."
   },
   {
     "image": "/static/portraits/Manon.png",
-    "name": "Manon — Styliste botanique",
-    "description": "Conçoit des arrangements à la frontière de l’art et du végétal."
+    "name": "— Manon — Styliste botanique",
+    "description": "— MANON — A le merite d'exister, elle est styliste botanique. Elle compose des pièces uniques, des accessoires et des vêtements en fleurs séchées."
   },
   {
     "image": "/static/portraits/Amiel.png",
     "name": "Amiel — Scénographe floral",
-    "description": "Orchestre chaque composition dans l’espace comme une performance."
+    "description": "— AMIEL —  Orchestre chaque composition dans l’espace comme une performance."
   }
 ]
