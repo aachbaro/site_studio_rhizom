@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+# 1) Propagation de Authorization en variable d'env
+
+RewriteRule .\* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Alternative pour PHP-FPM :
+
+SetEnvIf Authorization "(.\*)" HTTP_AUTHORIZATION=$1
+
+# 2) Vue Router fallback
+
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+</IfModule>

@@ -1,7 +1,8 @@
 <template>
-  <section class="h-screen w-full bg-white flex items-center">
-    <!-- Carousel des projets -->
-    <div class="w-full h-full overflow-hidden">
+  <section
+    class="w-full bg-white md:h-screen h-auto md:flex md:items-center items-start"
+  >
+    <div class="w-full overflow-hidden md:pb-0 pb-12">
       <ProjectsCarousel :projects="projects" :slideWidth="carouselWidth" />
     </div>
   </section>

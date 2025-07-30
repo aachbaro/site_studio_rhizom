@@ -45,3 +45,9 @@ uploads/
 *.tmp
 .DS_Store
 Thumbs.db
+
+deploy.ps1
+
+deploy_winscp.txt
+
+/site-rhizom/api/vendor/**/.git/
