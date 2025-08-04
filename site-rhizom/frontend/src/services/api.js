@@ -71,15 +71,24 @@ export function addProject({ title, image }) {
 }
 
 export function updateProject({ id, title }) {
+  const form = new FormData();
+  form.append("_method", "PUT");
+  form.append("id", id);
+  form.append("title", title);
   return request("/api/projects.php", {
-    method: "PUT",
-    json: true,
-    body: JSON.stringify({ id, title }),
+    method: "POST",
+    body: form
   });
 }
 
 export function deleteProject({ id }) {
-  return request(`/api/projects.php?id=${id}`, { method: "DELETE" });
+  const form = new FormData();
+  form.append("_method", "DELETE");
+  form.append("id", id);
+  return request("/api/projects.php", {
+    method: "POST",
+    body: form
+  });
 }
 
 //

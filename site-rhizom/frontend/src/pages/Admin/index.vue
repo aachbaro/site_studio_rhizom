@@ -9,7 +9,6 @@
         placeholder="Mot de passe"
         class="input"
         @keyup.enter="handleLogin"
-        style="margin-bottom: 8px"
       />
       <button @click="handleLogin" class="btn">Se connecter</button>
       <p style="color: red" v-if="loginError">{{ loginError }}</p>
@@ -23,8 +22,10 @@
       >
         Déconnexion
       </button>
+
+      <!-- Upload -->
       <h2>Ajouter une image</h2>
-      <select v-model="type" class="input" style="margin-bottom: 8px">
+      <select v-model="type" class="input">
         <option value="carousel">Carousel</option>
         <option value="project">Projet</option>
       </select>
@@ -33,27 +34,21 @@
         accept="image/*"
         @change="handleFileChange"
         class="input"
-        style="margin-bottom: 8px"
       />
-      <!-- on affiche le titre uniquement pour les projets -->
       <input
         v-if="type === 'project'"
         v-model="title"
         type="text"
         placeholder="Titre"
         class="input"
-        style="margin-bottom: 8px"
       />
       <button @click="handleSubmit" class="btn">Uploader</button>
       <p v-if="uploadStatus" style="margin-top: 12px">{{ uploadStatus }}</p>
 
-      <!-- Gestion du carousel -->
-
+      <!-- Carousel -->
       <div class="p-12">
-        <h2 class="text-4xl md:text-5xl mb-8 mx-auto self-start font-bold">
-          Carousel du Home
-        </h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 lg:grid-cols-8">
+        <h2 class="text-4xl md:text-5xl mb-8 font-bold">Carousel du Home</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div v-for="img in images" :key="img.id" class="relative group">
             <img
               :src="img.url"
@@ -62,7 +57,7 @@
             />
             <button
               @click="deleteImage(img.id)"
-              class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded opacity-80 hover:opacity-100"
+              class="absolute top-2 right-2 btn-delete"
             >
               x
             </button>
@@ -71,28 +66,22 @@
         </div>
       </div>
 
-      <!-- gestion des projets -->
-
+      <!-- Projets -->
       <div class="p-12">
-        <h2
-          class="text-4xl md:text-5xl leading-tight mb-8 mx-auto self-start font-bold self-align-center"
-        >
-          Projets
-        </h2>
-        <div class="grid grid-cols-2 gap-4 mt-8 md:grid-cols-3 lg:grid-cols-8">
+        <h2 class="text-4xl md:text-5xl mb-8 font-bold">Projets</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div v-for="proj in projets" :key="proj.id" class="relative group">
             <img
               :src="proj.url"
               :alt="proj.title"
-              class="rounded shadow w-full h-48 object-"
+              class="rounded shadow w-full h-48 object-cover"
             />
             <button
               @click="deleteProjet(proj.id)"
-              class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded opacity-80 hover:opacity-100"
+              class="absolute top-2 right-2 btn-delete"
             >
               x
             </button>
-            <!-- Affichage normal ou en édition -->
             <div class="mt-1 text-xs text-center">
               <template v-if="editingId !== proj.id">
                 {{ proj.title }}
@@ -142,26 +131,28 @@ const type = ref("carousel");
 const uploadStatus = ref("");
 
 const images = ref([]);
-
 const projets = ref([]);
 const editingId = ref(null);
 const editTitle = ref("");
 
+// Édition de titre
 function startEdit(proj) {
   editingId.value = proj.id;
   editTitle.value = proj.title;
 }
 
 async function saveEdit(id) {
-  const token = localStorage.getItem("adminToken");
-  const res = await updateProject({ id, title: editTitle.value, token });
-  if (res.success) {
-    // Met à jour localement
-    const p = projets.value.find((p) => p.id === id);
-    p.title = editTitle.value;
-    editingId.value = null;
-  } else {
-    alert("Erreur : " + res.error);
+  try {
+    const res = await updateProject({ id, title: editTitle.value });
+    if (res.success) {
+      const p = projets.value.find((p) => p.id === id);
+      p.title = editTitle.value;
+      editingId.value = null;
+    } else {
+      alert("Erreur : " + res.error);
+    }
+  } catch {
+    alert("Erreur réseau");
   }
 }
 
@@ -169,47 +160,35 @@ function cancelEdit() {
   editingId.value = null;
 }
 
-function getToken() {
-  return localStorage.getItem("adminToken");
-}
-
-function setToken(token) {
-  localStorage.setItem("adminToken", token);
-}
-function removeToken() {
-  localStorage.removeItem("adminToken");
-}
-
+// Login / Logout
 const handleLogin = async () => {
   loginError.value = "";
   try {
-    const data = await loginAdmin(password.value);
-    if (data.error || !data.token) {
-      loginError.value = data.error || "Erreur de connexion";
+    const res = await loginAdmin(password.value);
+    if (!res.success) {
+      loginError.value = res.error || "Erreur de connexion";
       return;
     }
-    setToken(data.token);
     isAuthenticated.value = true;
     password.value = "";
-    // Recharge les listes après login
     await fetchAll();
-  } catch (err) {
+  } catch {
     loginError.value = "Erreur réseau";
   }
 };
 
 const logout = () => {
-  removeToken();
+  // détruire la session côté serveur si tu as un logout.php
   isAuthenticated.value = false;
   password.value = "";
 };
 
-const handleFileChange = (event) => {
-  file.value = event.target.files[0];
+// File & upload
+const handleFileChange = (e) => {
+  file.value = e.target.files[0];
 };
 
 const handleSubmit = async () => {
-  // On exige le fichier systématiquement, et le titre seulement pour les projets
   if (!file.value || (type.value === "project" && !title.value)) {
     uploadStatus.value =
       type.value === "project"
@@ -218,31 +197,15 @@ const handleSubmit = async () => {
     return;
   }
 
+  uploadStatus.value = "";
   try {
     let res;
     if (type.value === "carousel") {
-      res = await addCarouselImage({
-        image: file.value,
-        token: getToken(),
-      });
+      res = await addCarouselImage({ image: file.value });
     } else {
-      res = await addProject({
-        title: title.value,
-        image: file.value,
-        token: getToken(),
-      });
+      res = await addProject({ title: title.value, image: file.value });
     }
-
     if (res.error) {
-      if (
-        res.error.includes("non autorisé") ||
-        res.error.includes("Token invalide") ||
-        res.error.includes("expiré")
-      ) {
-        logout();
-        uploadStatus.value = "Session expirée. Veuillez vous reconnecter.";
-        return;
-      }
       uploadStatus.value = "Erreur : " + res.error;
     } else {
       uploadStatus.value = "Upload réussi !";
@@ -251,60 +214,44 @@ const handleSubmit = async () => {
       await fetchAll();
     }
   } catch (e) {
-    uploadStatus.value = "Erreur réseau : " + e.message;
+    uploadStatus.value = "Erreur réseau";
   }
 };
 
+// Suppression
 const deleteImage = async (id) => {
-  if (!confirm("Supprimer cette image ?")) return;
-  const res = await deleteCarouselImage({ id, token: getToken() });
-  if (res && res.success) {
-    images.value = images.value.filter((img) => img.id !== id);
-  } else if (res && res.error) {
-    if (
-      res.error.includes("non autorisé") ||
-      res.error.includes("Token invalide") ||
-      res.error.includes("expiré")
-    ) {
-      logout();
-      alert("Session expirée. Veuillez vous reconnecter.");
-    } else {
-      alert("Erreur lors de la suppression ! " + res.error);
-    }
-  } else {
-    alert("Erreur lors de la suppression !");
+  if (!confirm("Supprimer cette image ?")) return;
+  try {
+    const res = await deleteCarouselImage({ id });
+    if (res.success) images.value = images.value.filter((i) => i.id !== id);
+    else alert("Erreur : " + res.error);
+  } catch {
+    alert("Erreur réseau");
   }
 };
 
 const deleteProjet = async (id) => {
-  if (!confirm("Supprimer ce projet ?")) return;
-  const res = await deleteProject({ id, token: getToken() });
-  if (res && res.success) {
-    projets.value = projets.value.filter((p) => p.id !== id);
-  } else if (res && res.error) {
-    if (
-      res.error.includes("non autorisé") ||
-      res.error.includes("Token invalide") ||
-      res.error.includes("expiré")
-    ) {
-      logout();
-      alert("Session expirée. Veuillez vous reconnecter.");
-    } else {
-      alert("Erreur lors de la suppression ! " + res.error);
-    }
-  } else {
-    alert("Erreur lors de la suppression !");
+  if (!confirm("Supprimer ce projet ?")) return;
+  try {
+    const res = await deleteProject({ id });
+    if (res.success) projets.value = projets.value.filter((p) => p.id !== id);
+    else alert("Erreur : " + res.error);
+  } catch {
+    alert("Erreur réseau");
   }
 };
 
+// Chargement des données
 const fetchAll = async () => {
   images.value = await fetchCarousel();
   projets.value = await fetchProjects();
 };
 
 onMounted(() => {
-  isAuthenticated.value = !!getToken();
-  fetchAll();
+  // on peut tenter une vérif côté session
+  fetchAll().catch(() => {
+    // si non auth, reste sur login
+  });
 });
 </script>
 
@@ -325,5 +272,13 @@ onMounted(() => {
   border: none;
   cursor: pointer;
   margin-top: 4px;
+}
+.btn-delete {
+  background: red;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>

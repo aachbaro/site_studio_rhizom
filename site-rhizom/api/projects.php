@@ -1,14 +1,8 @@
 <?php
 // api/projects.php
-
-// Affichage des erreurs en dev
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
-// JSON en sortie
 header('Content-Type: application/json');
-
-// Démarre la session PHP
 session_start();
 
 require_once 'config.php';
@@ -21,23 +15,23 @@ try {
     );
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['error' => 'Connexion à la base impossible']);
+    echo json_encode(['error'=>'Connexion à la base impossible']);
     exit;
 }
 
-// Sur POST, PUT, DELETE, on vérifie que l'admin est connecté
-if (in_array($_SERVER['REQUEST_METHOD'], ['POST','PUT','DELETE'])) {
-    if (empty($_SESSION['is_admin'])) {
-        http_response_code(401);
-        echo json_encode(['error' => 'Non autorisé']);
-        exit;
-    }
+// === Override de la méthode ===
+$method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+
+// === Vérif session pour méthodes protégées ===
+if (in_array($method, ['POST','PUT','DELETE']) && empty($_SESSION['is_admin'])) {
+    http_response_code(401);
+    echo json_encode(['error'=>'Non autorisé']);
+    exit;
 }
 
-// ---------------------------------------------
-// GET (public) : liste des projets
-// ---------------------------------------------
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+// === ROUTAGE ===
+if ($method === 'GET') {
+    // --- liste des projets (inchangé) ---
     try {
         $stmt     = $pdo->query("SELECT * FROM projects");
         $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -47,114 +41,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode($projects);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Erreur récupération projets']);
+        echo json_encode(['error'=>'Erreur récupération projets']);
     }
     exit;
 }
 
-// ---------------------------------------------
-// POST (admin) : création d’un projet
-// ---------------------------------------------
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($method === 'POST') {
+    // --- création d’un projet (inchangé) ---
     if (!isset($_POST['title']) || !isset($_FILES['image'])) {
         http_response_code(400);
-        echo json_encode(['error' => 'Champs manquants']);
+        echo json_encode(['error'=>'Champs manquants']);
         exit;
     }
-
     $title     = trim($_POST['title']);
     $image     = $_FILES['image'];
     $targetDir = __DIR__ . '/../uploads/';
-    $filename  = uniqid() . '_' . basename($image['name']);
-    $targetFile= $targetDir . $filename;
-
-    if (!move_uploaded_file($image['tmp_name'], $targetFile)) {
+    $filename  = uniqid().'_'.basename($image['name']);
+    if (!move_uploaded_file($image['tmp_name'], $targetDir.$filename)) {
         http_response_code(500);
-        echo json_encode(['error' => 'Échec du téléchargement']);
+        echo json_encode(['error'=>'Échec du téléchargement']);
         exit;
     }
-
     try {
-        $stmt = $pdo->prepare("INSERT INTO projects (title, url) VALUES (?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO projects (title,url) VALUES (?,?)");
         $stmt->execute([$title, $filename]);
-        echo json_encode(['success' => true]);
+        echo json_encode(['success'=>true]);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Erreur insertion en base']);
+        echo json_encode(['error'=>'Erreur insertion en base']);
     }
     exit;
 }
 
-// ---------------------------------------------
-// PUT (admin) : mise à jour du titre
-// ---------------------------------------------
-if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    $data  = json_decode(file_get_contents('php://input'), true);
-    $id    = $data['id'] ?? null;
-    $title = trim($data['title'] ?? '');
-
-    if (!$id || $title === '') {
+if ($method === 'PUT') {
+    // --- mise à jour du titre ---
+    $id    = $_POST['id'] ?? null;
+    $title = trim($_POST['title'] ?? '');
+    if (!$id || $title==='') {
         http_response_code(400);
-        echo json_encode(['error' => 'ID et titre obligatoires']);
+        echo json_encode(['error'=>'ID et titre obligatoires']);
         exit;
     }
-
     try {
-        $stmt = $pdo->prepare("UPDATE projects SET title = ? WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE projects SET title=? WHERE id=?");
         $stmt->execute([$title, $id]);
-        echo json_encode(['success' => true]);
+        echo json_encode(['success'=>true]);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Erreur mise à jour']);
+        echo json_encode(['error'=>'Erreur mise à jour']);
     }
     exit;
 }
 
-// ---------------------------------------------
-// DELETE (admin) : suppression d’un projet
-// ---------------------------------------------
-if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $id = $_GET['id'] ?? null;
-    if (!$id && strpos($_SERVER['CONTENT_TYPE'], 'application/json') === 0) {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $id   = $data['id'] ?? null;
-    }
+if ($method === 'DELETE') {
+    // --- suppression ---
+    $id = $_POST['id'] ?? null;
     if (!$id) {
         http_response_code(400);
-        echo json_encode(['error' => 'ID manquant']);
+        echo json_encode(['error'=>'ID manquant']);
         exit;
     }
-
     try {
-        // Récupère le nom de fichier
-        $stmt = $pdo->prepare("SELECT url FROM projects WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT url FROM projects WHERE id=?");
         $stmt->execute([$id]);
         $proj = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$proj) {
             http_response_code(404);
-            echo json_encode(['error' => 'Projet non trouvé']);
+            echo json_encode(['error'=>'Projet non trouvé']);
             exit;
         }
-
-        // Supprime le fichier physique
-        $imgPath = __DIR__ . '/../uploads/' . $proj['url'];
-        if (file_exists($imgPath)) {
-            unlink($imgPath);
-        }
-
-        // Supprime la ligne en base
-        $stmt = $pdo->prepare("DELETE FROM projects WHERE id = ?");
+        $path = __DIR__.'/../uploads/'.$proj['url'];
+        if (file_exists($path)) unlink($path);
+        $stmt = $pdo->prepare("DELETE FROM projects WHERE id=?");
         $stmt->execute([$id]);
-        echo json_encode(['success' => true]);
+        echo json_encode(['success'=>true]);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Erreur suppression']);
+        echo json_encode(['error'=>'Erreur suppression']);
     }
     exit;
 }
 
-// ---------------------------------------------
-// Méthode non supportée
-// ---------------------------------------------
+// --- méthode non supportée ---
 http_response_code(405);
-echo json_encode(['error' => 'Méthode non autorisée']);
+echo json_encode(['error'=>'Méthode non autorisée']);
