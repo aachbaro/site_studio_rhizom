@@ -3,11 +3,11 @@
   <SplashVideo
     v-if="showSplash"
     :src="SPLASH_VIDEO"
-    :poster="SPLASH_POSTER"
     :minSkipDelayMs="5000"
     :maxDurationMs="10000"
     @exit="onSplashExit"
-  >
+    >
+    <!-- :poster="SPLASH_POSTER" -->
     <template #logo>
       <StudioLogo />
     </template>
@@ -28,7 +28,7 @@ import StudioLogo from "./components/StudioLogo.vue";
 import CustomCursor from "./components/CustomCursor.vue";
 
 const SPLASH_VIDEO = "/static/home/intro.mp4";
-const SPLASH_POSTER = "/static/home/intro_poster.jpg";
+// const SPLASH_POSTER = "/static/home/intro_poster.jpg";
 
 // Ajoute ?splash=1 dans l'URL pour forcer le splash même après le premier passage.
 const force = new URLSearchParams(location.search).get("splash") === "1";
