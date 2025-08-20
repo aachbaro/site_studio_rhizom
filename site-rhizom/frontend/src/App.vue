@@ -2,6 +2,58 @@
   <CustomCursor />
   <SplashVideo
     v-if="showSplash"
+    :src="SPLASH_VIDEO"
+    :poster="SPLASH_POSTER"
+    :minSkipDelayMs="5000"
+    :maxDurationMs="10000"
+    @exit="onSplashExit"
+  >
+    <template #logo>
+      <StudioLogo />
+    </template>
+  </SplashVideo>
+
+  <div v-else>
+    <DefaultLayout>
+      <router-view />
+    </DefaultLayout>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import DefaultLayout from "./layouts/DefaultLayout.vue";
+import SplashVideo from "./components/SplashVideo.vue";
+import StudioLogo from "./components/StudioLogo.vue";
+import CustomCursor from "./components/CustomCursor.vue";
+
+const SPLASH_VIDEO = "/static/home/intro.mp4";
+const SPLASH_POSTER = "/static/home/intro_poster.jpg";
+
+// Ajoute ?splash=1 dans l'URL pour forcer le splash même après le premier passage.
+const force = new URLSearchParams(location.search).get("splash") === "1";
+const showSplash = ref(
+  force || localStorage.getItem("hasSeenSplash") !== "true"
+);
+
+onMounted(() => {
+  if (showSplash.value) document.body.style.overflow = "hidden";
+});
+onBeforeUnmount(() => {
+  document.body.style.overflow = "";
+});
+
+function onSplashExit() {
+  localStorage.setItem("hasSeenSplash", "true");
+  showSplash.value = false;
+  document.body.style.overflow = "";
+}
+</script>
+
+<!-- <template>
+  <CustomCursor />
+  <SplashVideo
+    v-if="showSplash"
     src="/static/home/intro.mp4"
     @ended="onSplashEnded"
   />
@@ -47,3 +99,4 @@ export default {
   },
 };
 </script>
+ -->
