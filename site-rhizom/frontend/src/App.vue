@@ -6,7 +6,7 @@
     :minSkipDelayMs="5000"
     :maxDurationMs="10000"
     @exit="onSplashExit"
-    >
+  >
     <!-- :poster="SPLASH_POSTER" -->
     <template #logo>
       <StudioLogo />
@@ -32,8 +32,20 @@ const SPLASH_VIDEO = "/static/home/intro.mp4";
 
 // Ajoute ?splash=1 dans l'URL pour forcer le splash même après le premier passage.
 const force = new URLSearchParams(location.search).get("splash") === "1";
+// const showSplash = ref(
+//   force || localStorage.getItem("hasSeenSplash") !== "true"
+// );
+
+// Durée en ms (15 minutes)
+// const SPLASH_INTERVAL = 15 * 60 * 1000;
+const SPLASH_INTERVAL = 0;
+
+// récupère la dernière fois
+const lastSplash = parseInt(localStorage.getItem("lastSplashTime") || "0", 10);
+const now = Date.now();
+
 const showSplash = ref(
-  force || localStorage.getItem("hasSeenSplash") !== "true"
+  force || lastSplash === 0 || now - lastSplash >= SPLASH_INTERVAL
 );
 
 onMounted(() => {
@@ -44,7 +56,10 @@ onBeforeUnmount(() => {
 });
 
 function onSplashExit() {
-  localStorage.setItem("hasSeenSplash", "true");
+  const now = Date.now();
+  // on garde l'heure du dernier passage en ms
+  localStorage.setItem("lastSplashTime", String(now));
+
   showSplash.value = false;
   document.body.style.overflow = "";
 }
