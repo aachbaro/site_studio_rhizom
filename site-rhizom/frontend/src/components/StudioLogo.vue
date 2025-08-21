@@ -1,20 +1,11 @@
-<!-- src/components/StudioLogo.vue -->
 <template>
   <img
     :src="logoUrl"
     alt="Studio Rhizom"
-    class="w-56 max-w-[60vw] opacity-0 animate-[fadein_0.7s_ease_0.3s_forwards]"
+    class="w-[min(60vw,480px)] md:w-[420px] /* taille */ brightness-0 invert /* passe en blanc si source noire */"
   />
 </template>
 
 <script setup>
 const logoUrl = "/static/logo/studio-logo.svg";
 </script>
-
-<style>
-@keyframes fadein {
-  to {
-    opacity: 1;
-  }
-}
-</style>

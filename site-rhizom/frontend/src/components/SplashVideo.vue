@@ -1,11 +1,12 @@
-<!-- src/components/SplashVideo.vue -->
 <template>
-  <div class="fixed inset-0 z-[9999] bg-black">
+  <div
+    class="fixed inset-0 z-[100] bg-black transition-opacity duration-5000"
+    :class="exiting ? 'opacity-0' : 'opacity-100'"
+  >
     <video
       ref="vid"
       class="absolute inset-0 w-full h-full object-cover"
       :src="src"
-      :poster="poster"
       autoplay
       muted
       playsinline
@@ -13,18 +14,26 @@
       @ended="exit"
       @error="onError"
     />
+
+    <!-- Logo centré, rendu par slot -->
     <div
       class="absolute inset-0 flex items-center justify-center pointer-events-none"
     >
       <slot name="logo" />
     </div>
+
+    <!-- Bouton Passer : bas-droite + fondu -->
     <button
-      v-if="canSkip"
-      class="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full px-4 py-2 border border-white/70 text-white/90 backdrop-blur-sm"
+      rounded-full
+      px-4
+      py-1
+      text-sm
+      class="absolute bottom-6 right-6 rounded-full border transition-opacity duration-500 border-white/70 text-white/90 px-7 py-1"
+      :class="canSkip ? 'opacity-100' : 'opacity-0 pointer-events-none'"
       @click="exit"
       aria-label="Passer la vidéo d’introduction"
     >
-      Passer
+      passer
     </button>
   </div>
 </template>
@@ -36,14 +45,15 @@ import { usePreloader } from "../composables/usePreloader";
 import { assetsToPreload } from "../services/assetsToPreload";
 
 const props = defineProps({
-  src: String,
-  poster: String,
-  minSkipDelayMs: { type: Number, default: 5000 },
+  src: { type: String, required: true },
+  minSkipDelayMs: { type: Number, default: 3000 },
   maxDurationMs: { type: Number, default: 10000 },
 });
 const emit = defineEmits(["exit", "error"]);
 
 const vid = ref(null);
+const exiting = ref(false);
+
 const { canSkip, startTimers, clearTimers } = useSplashState({
   minSkipDelayMs: props.minSkipDelayMs,
   maxDurationMs: props.maxDurationMs,
@@ -53,11 +63,12 @@ const { start: startPreload, cancel: cancelPreload } = usePreloader();
 
 onMounted(async () => {
   startTimers();
+  // Préchargement en parallèle (tu peux enrichir la liste dans assetsToPreload)
   startPreload(assetsToPreload());
   try {
     await vid.value?.play();
   } catch {
-    /* autoplay bloqué → on laisse le bouton apparaître à 5s */
+    // autoplay bloqué : on laisse juste apparaître le bouton à 5s
   }
 });
 onBeforeUnmount(() => {
@@ -70,6 +81,7 @@ function onError(e) {
 }
 function exit() {
   clearTimers();
-  emit("exit");
+  exiting.value = true; // → lance le fondu (500ms)
+  setTimeout(() => emit("exit"), 5000); // → on sort après le fondu
 }
 </script>

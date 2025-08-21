@@ -5,7 +5,7 @@ import Footer from "../components/Footer.vue";
 
 <template>
   <div class="flex flex-col min-h-screen w-full bg-white text-black">
-    <Header />
+    <!-- <Header /> -->
     <!-- Contenu principal : prend tout l'espace restant -->
     <main class="flex-grow w-full px-0 py-0">
       <slot />

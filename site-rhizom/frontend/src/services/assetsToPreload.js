@@ -1,8 +1,10 @@
-// src/services/assetsToPreload.js
 export function assetsToPreload() {
   return [
-    { type: "image", url: "/static/home/hero1.webp" },
-    { type: "image", url: "/static/home/hero2.webp" },
-    { type: "json", url: "/api/carousel.php" },
-  ];
+    // Images visibles sur la home immédiatement
+    { type: 'image', url: '/static/home/hero1.webp' },
+    { type: 'image', url: '/static/home/hero2.webp' },
+    // Données initiales
+    { type: 'json',  url: '/api/carousel.php' },
+    // Ajoute ici les premières images de projets si tu les connais
+  ]
 }

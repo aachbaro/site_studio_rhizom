@@ -10,21 +10,30 @@
         Rhizom
       </router-link>
 
-      <!-- Desktop Navigation (inchangée) -->
+      <!-- Desktop -->
       <nav class="hidden md:flex gap-6">
         <router-link
           v-for="link in links"
           :key="link.path"
           :to="link.path"
-          class="flex items-center justify-center border border-black rounded-full px-4 py-2 text-sm lowercase hover:bg-black hover:text-white transition"
-          active-class="text-black"
+          :aria-current="isActivePath(link.path) ? 'page' : undefined"
+          :class="[
+            'btn-nav border-black lowercase', // base
+            isActivePath(link.path)
+              ? 'btn-nav--active' // actif = inversé
+              : 'hover:bg-black hover:text-white', // au survol sinon
+          ]"
         >
           {{ link.name }}
         </router-link>
       </nav>
 
-      <!-- Mobile Hamburger Icon -->
-      <button @click="toggleMenu" class="md:hidden focus:outline-none">
+      <!-- Mobile Hamburger -->
+      <button
+        @click="toggleMenu"
+        class="md:hidden focus:outline-none"
+        aria-label="Ouvrir le menu"
+      >
         <span class="sr-only">Ouvrir le menu</span>
         <svg
           v-if="!isOpen"
@@ -59,15 +68,21 @@
       </button>
     </div>
 
-    <!-- Mobile Navigation Drawer -->
+    <!-- Mobile Drawer -->
     <transition name="slide-down">
       <nav v-if="isOpen" class="md:hidden bg-white border-t border-gray-200">
         <ul class="flex flex-col px-6 py-4 space-y-4">
           <li v-for="link in links" :key="link.path">
             <router-link
               :to="link.path"
-              class="block text-base font-medium lowercase"
               @click="closeMenu"
+              :aria-current="isActivePath(link.path) ? 'page' : undefined"
+              :class="[
+                'btn-nav w-full justify-center', // base mobile
+                isActivePath(link.path)
+                  ? 'btn-nav--active'
+                  : 'hover:bg-black hover:text-white',
+              ]"
             >
               {{ link.name }}
             </router-link>
@@ -80,37 +95,19 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRoute } from "vue-router";
 
 const links = [
   { name: "Projets", path: "/projets" },
-  { name: "Studio", path: "/studio" },
+  { name: "le studio", path: "/studio" },
   { name: "Contact", path: "/contact" },
 ];
 
+const route = useRoute();
 const isOpen = ref(false);
-const toggleMenu = () => {
-  isOpen.value = !isOpen.value;
-};
-const closeMenu = () => {
-  isOpen.value = false;
-};
-</script>
+const toggleMenu = () => (isOpen.value = !isOpen.value);
+const closeMenu = () => (isOpen.value = false);
 
-<style scoped>
-/* Transition for mobile menu */
-.slide-down-enter-active {
-  transition: max-height 0.3s ease-out;
-}
-.slide-down-leave-active {
-  transition: max-height 0.2s ease-in;
-}
-.slide-down-enter-from,
-.slide-down-leave-to {
-  max-height: 0;
-  overflow: hidden;
-}
-.slide-down-enter-to,
-.slide-down-leave-from {
-  max-height: 300px;
-}
-</style>
+// actif si route exacte OU sous-chemin (/projets/xxx)
+const isActivePath = (p) => route.path === p || route.path.startsWith(p + "/");
+</script>

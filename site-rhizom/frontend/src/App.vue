@@ -1,23 +1,25 @@
 <template>
+  <!-- 1) Le site est MONTÉ dès le début -->
   <CustomCursor />
+
+  <Header />
+
+  <DefaultLayout>
+    <router-view />
+  </DefaultLayout>
+
+  <!-- 2) Le splash est un OVERLAY au-dessus, masqué quand on sort -->
   <SplashVideo
-    v-if="showSplash"
+    v-show="showSplash"
     :src="SPLASH_VIDEO"
     :minSkipDelayMs="5000"
     :maxDurationMs="10000"
     @exit="onSplashExit"
   >
-    <!-- :poster="SPLASH_POSTER" -->
     <template #logo>
-      <StudioLogo />
+      <StudioLogo class="logo-splash" />
     </template>
   </SplashVideo>
-
-  <div v-else>
-    <DefaultLayout>
-      <router-view />
-    </DefaultLayout>
-  </div>
 </template>
 
 <script setup>
@@ -26,24 +28,19 @@ import DefaultLayout from "./layouts/DefaultLayout.vue";
 import SplashVideo from "./components/SplashVideo.vue";
 import StudioLogo from "./components/StudioLogo.vue";
 import CustomCursor from "./components/CustomCursor.vue";
+import Header from "./components/Header.vue";
 
 const SPLASH_VIDEO = "/static/home/intro.mp4";
-// const SPLASH_POSTER = "/static/home/intro_poster.jpg";
+// pas de poster pour l’instant
 
-// Ajoute ?splash=1 dans l'URL pour forcer le splash même après le premier passage.
+// Force via ?splash=1
 const force = new URLSearchParams(location.search).get("splash") === "1";
-// const showSplash = ref(
-//   force || localStorage.getItem("hasSeenSplash") !== "true"
-// );
+// Toutes les 15 minutes :
+const SPLASH_INTERVAL = 15 * 60 * 1000;
+// const SPLASH_INTERVAL = 0;
 
-// Durée en ms (15 minutes)
-// const SPLASH_INTERVAL = 15 * 60 * 1000;
-const SPLASH_INTERVAL = 0;
-
-// récupère la dernière fois
 const lastSplash = parseInt(localStorage.getItem("lastSplashTime") || "0", 10);
 const now = Date.now();
-
 const showSplash = ref(
   force || lastSplash === 0 || now - lastSplash >= SPLASH_INTERVAL
 );
@@ -56,14 +53,25 @@ onBeforeUnmount(() => {
 });
 
 function onSplashExit() {
-  const now = Date.now();
-  // on garde l'heure du dernier passage en ms
-  localStorage.setItem("lastSplashTime", String(now));
-
+  localStorage.setItem("lastSplashTime", String(Date.now()));
   showSplash.value = false;
   document.body.style.overflow = "";
 }
 </script>
+
+<style>
+/* Optionnel : micro-retard & fade du logo */
+.logo-splash {
+  opacity: 0;
+  animation: logoFadeIn 5s ease forwards;
+  animation-delay: 3s; /* le logo apparaît plus tard */
+}
+@keyframes logoFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+</style>
 
 <!-- <template>
   <CustomCursor />

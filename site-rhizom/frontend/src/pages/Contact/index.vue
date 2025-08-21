@@ -1,60 +1,78 @@
 <template>
-  <section class="py-16 bg-white">
+  <section class="bg-white">
     <div
-      class="max-w-screen-xl mx-auto px-6 py-24 md:px-12 flex flex-col items-start"
+      class="max-w-screen-xl mx-auto px-6 md:px-12 pt-16 pb-0 flex flex-col items-start"
     >
-      <!-- 1. Intro texte -->
-      <div class="w-full md:w-3/4 text-left mb-115">
-        <p class="text-lg leading-relaxed">
-          Une envie, un projet, une question ?<br />
-          Parlez-nous de votre idée,<br />
-          nous serons là pour l’écouter et la faire fleurir.
-        </p>
+      <!-- 1) Intro -->
+      <div class="w-full sm:max-w-[34rem] md:max-w-[40rem] text-left mb-8">
+        <p class="text-base md:text-lg leading-relaxed">Ecrivez-nous.</p>
       </div>
 
-      <!-- 2. Formulaire -->
+      <!-- 2) Formulaire : colonne plus étroite pour garder un grand blanc à droite -->
       <form
-        class="w-full md:w-3/4 grid grid-cols-1 gap-6 py-24"
+        class="w-full sm:max-w-[28rem] md:max-w-[34rem] lg:max-w-[38rem] grid grid-cols-1 gap-4 md:gap-5"
         @submit.prevent="onSubmit"
       >
+        <!-- nom -->
+        <label class="sr-only" for="nom">Nom</label>
         <input
+          id="nom"
           type="text"
           name="nom"
           placeholder="nom"
           v-model="nom"
           required
-          class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
+          autocomplete="name"
+          class="w-full border border-black rounded-full px-6 py-2 placeholder-black/50 transition-all duration-200 hover:placeholder-transparent focus:placeholder-transparent hover:ring-2 focus:ring-2 ring-black ring-offset-0 focus:outline-none"
         />
+
+        <!-- email -->
+        <label class="sr-only" for="email">E-mail</label>
         <input
+          id="email"
           type="email"
           name="email"
           placeholder="e-mail"
           v-model="email"
           required
-          class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
+          autocomplete="email"
+          class="w-full border border-black rounded-full px-6 py-2 placeholder-black/50 transition-all duration-200 hover:placeholder-transparent focus:placeholder-transparent hover:ring-2 focus:ring-2 ring-black ring-offset-0 focus:outline-none"
         />
+
+        <!-- objet -->
+        <label class="sr-only" for="objet">Objet</label>
         <input
+          id="objet"
           type="text"
           name="objet"
           placeholder="objet"
           v-model="objet"
           required
-          class="w-full border border-black rounded-full px-6 py-3 placeholder-black/50 focus:outline-none"
+          class="w-full border border-black rounded-full px-6 py-2 placeholder-black/50 transition-all duration-200 hover:placeholder-transparent focus:placeholder-transparent hover:ring-2 focus:ring-2 ring-black ring-offset-0 focus:outline-none"
         />
+
+        <!-- message : forme plus carrée (moins large grâce au max-w du form + hauteur généreuse) -->
+        <label class="sr-only" for="message">Message</label>
         <textarea
+          id="message"
           name="message"
-          rows="8"
           placeholder="message"
           v-model="message"
           required
-          class="w-full border border-black rounded-2xl px-6 py-4 placeholder-black/50 focus:outline-none resize-none"
+          class="w-full h-48 md:h-56 border border-black rounded-2xl px-6 py-4 placeholder-black/50 resize-none transition-all duration-200 hover:placeholder-transparent focus:placeholder-transparent hover:ring-2 focus:ring-2 ring-black ring-offset-0 focus:outline-none"
         ></textarea>
-        <button
-          type="submit"
-          class="w-fit border border-black rounded-full px-8 py-2 text-sm lowercase hover:bg-black hover:text-white transition"
-        >
-          envoyer
-        </button>
+
+        <!-- bouton à droite -->
+        <div class="mt-2">
+          <button
+            type="submit"
+            class="ml-auto block border border-black rounded-full px-8 py-2 text-sm lowercase hover:bg-black hover:text-white transition-colors"
+          >
+            envoyer
+          </button>
+        </div>
+
+        <!-- messages -->
         <p v-if="success" class="text-green-600">Message envoyé !</p>
         <p v-if="error" class="text-red-600">{{ error }}</p>
       </form>
@@ -99,5 +117,5 @@ async function onSubmit() {
 </script>
 
 <style scoped>
-/* Aucun style supplémentaire pour l’instant */
+/* rien ici, tout est fait avec Tailwind */
 </style>

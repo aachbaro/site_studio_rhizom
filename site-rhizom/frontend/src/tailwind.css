@@ -150,3 +150,29 @@ body {
     height: 100%;
   }
 }
+
+/* Bouton fin et propre */
+.btn-thin {
+  @apply inline-flex items-center justify-center
+         border border-black text-black
+         rounded-full px-4 py-1 text-sm
+         hover:bg-black hover:text-white
+         transition-colors duration-200;
+}
+.btn-thin--lg {
+  @apply px-5 py-2 text-base;
+}
+
+/* Bouton nav par défaut */
+.btn-nav {
+  @apply inline-flex items-center justify-center
+         border border-black text-black
+         rounded-full px-4 py-1 text-sm
+         hover:bg-black hover:text-white
+         transition-colors duration-200;
+}
+
+/* État actif (inversé) */
+.btn-nav--active {
+  @apply bg-black text-white border-black;
+}
