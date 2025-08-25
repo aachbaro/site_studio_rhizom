@@ -2,7 +2,7 @@
   <section class="min-h-screen flex-col bg-white flex items-center">
     <div class="w-full px-4 md:px-8">
       <div class="grid grid-cols-1 md:grid-cols-12 items-center md:gap-10">
-        <!-- Colonne texte (à droite sur desktop) -->
+        <!-- Colonne texte -->
         <div
           class="order-2 md:order-2 md:col-span-5 flex flex-col justify-center pt-6"
         >
@@ -30,14 +30,26 @@
           </router-link>
         </div>
 
-        <!-- Colonne image (à gauche sur desktop) -->
+        <!-- Colonne image -->
+        <!-- Template (remplace juste la partie image) -->
         <div
           class="order-1 md:order-1 md:col-span-7 flex justify-center md:justify-end"
         >
+          <!-- Conteneur skeleton pour éviter le saut de mise en page -->
+          <div
+            class="h-[65vh] md:h-[100vh] w-full md:w-auto bg-gray-100 rounded shadow-lg flex items-center justify-center"
+            v-if="!heroReady"
+          >
+            <span class="text-sm text-gray-400">Chargement…</span>
+          </div>
+
           <img
+            v-else
             :src="heroSrc"
-            alt="Grande composition florale"
-            class="h-[65vh] md:h-[100vh] w-auto object-cover shadow-lg"
+            :alt="heroAlt"
+            class="h-[65vh] md:h-[100vh] w-auto object-cover shadow-lg transition-opacity duration-300"
+            :class="{ 'opacity-0': !imgLoaded, 'opacity-100': imgLoaded }"
+            @load="imgLoaded = true"
           />
         </div>
       </div>
@@ -51,16 +63,49 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
+import { fetchCarousel, getRandomHeroImage } from "../../services/api";
 import Carousel from "../../components/Carousel.vue";
-import { fetchCarousel } from "../../services/api";
 
 const images = ref([]);
-const heroIndex = ref(0);
-const heroSrc = computed(() => "/static/home/ImageHome/Grandeimage.png");
+
+// état pour le hero
+const heroSrc = ref("");
+const heroAlt = ref("Image d'accueil");
+const heroReady = ref(false); // on n’affiche l’img qu’une fois prête
+const imgLoaded = ref(false); // fade-in après @load
 
 onMounted(async () => {
+  // carrousel (inchangé)
   const data = await fetchCarousel();
   images.value = (data || []).map((img) => img.url);
+
+  // précharger l’image aléatoire avant de l’afficher
+  try {
+    const random = await getRandomHeroImage(); // {url, alt} | null
+    if (random?.url) {
+      const pre = new Image();
+      pre.onload = () => {
+        heroSrc.value = random.url;
+        heroAlt.value = random.alt || "Image d'accueil";
+        heroReady.value = true;
+      };
+      pre.onerror = () => {
+        // fallback silencieux si erreur réseau
+        heroSrc.value = "/static/home/ImageHome/Grandeimage.png";
+        heroAlt.value = "Image d'accueil";
+        heroReady.value = true;
+      };
+      pre.src = random.url;
+    } else {
+      heroSrc.value = "/static/home/ImageHome/Grandeimage.png";
+      heroAlt.value = "Image d'accueil";
+      heroReady.value = true;
+    }
+  } catch {
+    heroSrc.value = "/static/home/ImageHome/Grandeimage.png";
+    heroAlt.value = "Image d'accueil";
+    heroReady.value = true;
+  }
 });
 </script>

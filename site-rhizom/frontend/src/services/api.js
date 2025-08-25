@@ -77,7 +77,7 @@ export function updateProject({ id, title }) {
   form.append("title", title);
   return request("/api/projects.php", {
     method: "POST",
-    body: form
+    body: form,
   });
 }
 
@@ -87,7 +87,15 @@ export function deleteProject({ id }) {
   form.append("id", id);
   return request("/api/projects.php", {
     method: "POST",
-    body: form
+    body: form,
+  });
+}
+
+export function reorderProjects({ ids }) {
+  return request("/api/projects.php", {
+    method: "POST",
+    json: true,
+    body: JSON.stringify({ action: "reorder", ids }),
   });
 }
 
@@ -99,9 +107,10 @@ export function fetchCarousel() {
   return request("/api/carousel.php", { method: "GET" });
 }
 
-export function addCarouselImage({ image }) {
+export function addCarouselImages({ files }) {
   const form = new FormData();
-  form.append("image", image);
+  // name "images[]" pour le multiple
+  Array.from(files).forEach((f) => form.append("images[]", f));
   return request("/api/carousel.php", { method: "POST", body: form });
 }
 
@@ -119,4 +128,27 @@ export function sendContact({ name, email, objet, message }) {
     json: true,
     body: JSON.stringify({ name, email, objet, message }),
   });
+}
+
+//
+// — HERO IMAGE —
+//
+
+export function getAllHeroImages() {
+  return request("/api/home_hero.php", { method: "GET" });
+}
+
+export function getRandomHeroImage() {
+  return request("/api/home_hero.php?mode=random", { method: "GET" });
+}
+
+export function uploadHeroImages({ files, alt = "" }) {
+  const form = new FormData();
+  Array.from(files).forEach((f) => form.append("images[]", f));
+  if (alt) form.append("alt", alt);
+  return request("/api/home_hero.php", { method: "POST", body: form });
+}
+
+export function deleteHeroImage({ id }) {
+  return request(`/api/home_hero.php?id=${id}`, { method: "DELETE" });
 }

@@ -1,5 +1,5 @@
 <?php
-// api/carousel.php
+// api/home_hero.php
 
 // Affichage des erreurs en développement
 ini_set('display_errors', 1);
@@ -15,8 +15,9 @@ require_once 'config.php';
 
 try {
     $pdo = new PDO(
-        "mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=utf8",
-        DB_USER, DB_PASS,
+        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8",
+        DB_USER,
+        DB_PASS,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
     );
 } catch (PDOException $e) {
@@ -26,7 +27,7 @@ try {
 }
 
 // Si c'est une requête qui modifie (POST ou DELETE), on vérifie la session admin
-if (in_array($_SERVER['REQUEST_METHOD'], ['POST','DELETE'])) {
+if (in_array($_SERVER['REQUEST_METHOD'], ['POST', 'DELETE'])) {
     if (empty($_SESSION['is_admin'])) {
         http_response_code(401);
         echo json_encode(['error' => 'Non autorisé']);
@@ -35,31 +36,53 @@ if (in_array($_SERVER['REQUEST_METHOD'], ['POST','DELETE'])) {
 }
 
 // ---------------------------------------------
-// GET (public) : liste des images du carousel
+// GET (public)
+//  - /api/home_hero.php            => liste complète
+//  - /api/home_hero.php?mode=random => 1 image aléatoire active
 // ---------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $mode = $_GET['mode'] ?? null;
+
     try {
-        $stmt   = $pdo->query("SELECT * FROM carousel_images");
-        $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($images as &$img) {
-            $img['url'] = '/uploads/' . $img['url'];
+        if ($mode === 'random') {
+            // Retourne une image active au hasard
+            $stmt = $pdo->query("SELECT * FROM hero_images WHERE is_active = 1 ORDER BY RAND() LIMIT 1");
+            $img = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($img) {
+                $img['url'] = '/uploads/' . $img['url'];
+                echo json_encode($img);
+            } else {
+                echo json_encode(null);
+            }
+        } else {
+            // Liste complète
+            $stmt = $pdo->query("SELECT * FROM hero_images ORDER BY 
+                                 CASE WHEN display_order IS NULL THEN 1 ELSE 0 END, display_order ASC, id DESC");
+            $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($images as &$img) {
+                $img['url'] = '/uploads/' . $img['url'];
+            }
+            echo json_encode($images);
         }
-        echo json_encode($images);
     } catch (PDOException $e) {
         http_response_code(500);
-        echo json_encode(['error' => 'Erreur récupération carousel']);
+        echo json_encode(['error' => 'Erreur récupération hero']);
     }
     exit;
 }
 
 // ---------------------------------------------
 // POST (admin) : upload d'une nouvelle image
+// champs attendus : image (file) + alt (optionnel)
 // ---------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Normaliser en tableau de fichiers
+    $alt = isset($_POST['alt']) ? trim($_POST['alt']) : null;
+    if ($alt === '') $alt = null;
+
+    // Normaliser en tableau
     $files = [];
     if (isset($_FILES['images'])) {
-        // multiple (images[])
         $count = count($_FILES['images']['name']);
         for ($i = 0; $i < $count; $i++) {
             $files[] = [
@@ -71,7 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
     } elseif (isset($_FILES['image'])) {
-        // single (image)
         $files[] = $_FILES['image'];
     } else {
         http_response_code(400);
@@ -83,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!is_dir($targetDir)) @mkdir($targetDir, 0775, true);
 
     $allowedExts = ['jpg','jpeg','png','webp','gif'];
-    $insert = $pdo->prepare("INSERT INTO carousel_images (url) VALUES (?)");
+    $insert = $pdo->prepare("INSERT INTO hero_images (url, alt) VALUES (?, ?)");
 
     $saved = [];
     foreach ($files as $image) {
@@ -92,13 +114,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ext = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
         if (!in_array($ext, $allowedExts)) continue;
 
-        $filename = uniqid('car_', true) . '_' . basename($image['name']);
+        $filename = uniqid('hero_', true) . '_' . basename($image['name']);
         $targetFile = $targetDir . $filename;
 
         if (!move_uploaded_file($image['tmp_name'], $targetFile)) continue;
 
         try {
-            $insert->execute([$filename]);
+            $insert->execute([$filename, $alt]);
             $saved[] = $filename;
         } catch (PDOException $e) {
             @unlink($targetFile);
@@ -116,14 +138,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ---------------------------------------------
-// DELETE (admin) : suppression d'une image
+// DELETE (admin) : suppression d'une image (file + DB)
+//  - /api/home_hero.php?id=123
+//  - ou body JSON: { "id": 123 }
 // ---------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $id = $_GET['id'] ?? null;
-    if (!$id && strpos($_SERVER['CONTENT_TYPE'], 'application/json') === 0) {
+
+    if (!$id && !empty($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'application/json') === 0) {
         $data = json_decode(file_get_contents('php://input'), true);
-        $id   = $data['id'] ?? null;
+        $id = $data['id'] ?? null;
     }
+
     if (!$id) {
         http_response_code(400);
         echo json_encode(['error' => 'ID manquant']);
@@ -131,9 +157,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     }
 
     try {
-        $stmt = $pdo->prepare("SELECT url FROM carousel_images WHERE id = ?");
+        // Récupère l'URL pour supprimer le fichier
+        $stmt = $pdo->prepare("SELECT url FROM hero_images WHERE id = ?");
         $stmt->execute([$id]);
         $img = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if (!$img) {
             http_response_code(404);
             echo json_encode(['error' => 'Image non trouvée']);
@@ -142,11 +170,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
         $imgPath = __DIR__ . '/../uploads/' . $img['url'];
         if (file_exists($imgPath)) {
-            unlink($imgPath);
+            @unlink($imgPath);
         }
 
-        $stmt = $pdo->prepare("DELETE FROM carousel_images WHERE id = ?");
+        // Supprime la ligne
+        $stmt = $pdo->prepare("DELETE FROM hero_images WHERE id = ?");
         $stmt->execute([$id]);
+
         echo json_encode(['success' => true]);
     } catch (PDOException $e) {
         http_response_code(500);
