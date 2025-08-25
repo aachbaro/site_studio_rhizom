@@ -11,11 +11,14 @@
         class="flex-none snap-start relative overflow-hidden flex flex-col items-center justify-start"
         :style="{ width: slideW + 'px' }"
       >
-        <img
+        <SmartImage
           :src="p.url"
           :alt="p.title"
-          class="w-full h-auto object-cover md:h-[100svh]"
-          loading="lazy"
+          :placeholder="p.blur || ''"
+          :intrinsic="p.intrinsic || null"
+          :srcset="p.srcset || ''"
+          :sizes="p.sizes || carouselSizes"
+          imgClass="w-full h-auto object-cover md:h-[100svh]"
         />
 
         <!-- Titre mobile sous l'image -->
@@ -78,10 +81,14 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import SmartImage from "./SmartImage.vue";
 
 const props = defineProps({
   projects: { type: Array, required: true },
 });
+
+const carouselSizes =
+  "(min-width:1280px) 33vw, (min-width:768px) 50vw, 90vw";
 
 const width = ref(window.innerWidth);
 const updateWidth = () => (width.value = window.innerWidth);
