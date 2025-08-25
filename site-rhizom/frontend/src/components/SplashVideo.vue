@@ -7,6 +7,7 @@
       ref="vid"
       class="absolute inset-0 w-full h-full object-cover"
       :src="src"
+      preload="metadata"
       autoplay
       muted
       playsinline

@@ -43,13 +43,14 @@
             <span class="text-sm text-gray-400">Chargement…</span>
           </div>
 
-          <img
+          <SmartImage
             v-else
             :src="heroSrc"
             :alt="heroAlt"
-            class="h-[65vh] md:h-[100vh] w-auto object-cover shadow-lg transition-opacity duration-300"
-            :class="{ 'opacity-0': !imgLoaded, 'opacity-100': imgLoaded }"
-            @load="imgLoaded = true"
+            eager
+            :intrinsic="{ width: 1440, height: 2160 }"
+            sizes="(min-width:1024px) 50vw, 90vw"
+            imgClass="h-[65vh] md:h-[100vh] w-auto object-cover shadow-lg"
           />
         </div>
       </div>
@@ -66,6 +67,7 @@
 import { ref, onMounted } from "vue";
 import { fetchCarousel, getRandomHeroImage } from "../../services/api";
 import Carousel from "../../components/Carousel.vue";
+import SmartImage from "../../components/SmartImage.vue";
 
 const images = ref([]);
 
@@ -73,7 +75,6 @@ const images = ref([]);
 const heroSrc = ref("");
 const heroAlt = ref("Image d'accueil");
 const heroReady = ref(false); // on n’affiche l’img qu’une fois prête
-const imgLoaded = ref(false); // fade-in après @load
 
 onMounted(async () => {
   // carrousel (inchangé)
