@@ -1,6 +1,6 @@
 <template>
   <!-- 1) Le site est MONTÉ dès le début -->
-  <CustomCursor />
+  <CustomCursor v-if="isDesktop" />
 
   <Header />
 
@@ -30,14 +30,17 @@ import StudioLogo from "./components/StudioLogo.vue";
 import CustomCursor from "./components/CustomCursor.vue";
 import Header from "./components/Header.vue";
 
+const isDesktop = ref(false);
+let mq;
+
 const SPLASH_VIDEO = "/static/home/intro.mp4";
 // pas de poster pour l’instant
 
 // Force via ?splash=1
 const force = new URLSearchParams(location.search).get("splash") === "1";
 // Toutes les 15 minutes :
-const SPLASH_INTERVAL = 15 * 60 * 1000;
-// const SPLASH_INTERVAL = 0;
+// const SPLASH_INTERVAL = 15 * 60 * 1000;
+const SPLASH_INTERVAL = 0;
 
 const lastSplash = parseInt(localStorage.getItem("lastSplashTime") || "0", 10);
 const now = Date.now();
@@ -45,11 +48,19 @@ const showSplash = ref(
   force || lastSplash === 0 || now - lastSplash >= SPLASH_INTERVAL
 );
 
+function updateIsDesktop() {
+  isDesktop.value = mq.matches;
+}
+
 onMounted(() => {
   if (showSplash.value) document.body.style.overflow = "hidden";
+  mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+  updateIsDesktop();
+  mq.addEventListener("change", updateIsDesktop);
 });
 onBeforeUnmount(() => {
   document.body.style.overflow = "";
+  mq?.removeEventListener("change", updateIsDesktop);
 });
 
 function onSplashExit() {

@@ -119,3 +119,22 @@ body {
 .btn-nav--active {
   @apply bg-black text-white border-black;
 }
+
+@layer base {
+  html {
+    /* permet de scroller normalement */
+    overflow-y: auto;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* IE/Edge legacy */
+    -ms-overflow-style: none;
+  }
+
+  /* WebKit / Chromium (Chrome, Edge, Safari) */
+  html::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}

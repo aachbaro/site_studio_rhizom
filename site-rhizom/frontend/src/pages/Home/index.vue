@@ -1,10 +1,12 @@
 <template>
   <section class="min-h-screen flex-col bg-white flex items-center">
     <div class="w-full px-4 md:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-12 items-center md:gap-10">
+      <div
+        class="grid grid-cols-1 md:grid-cols-12 items-center md:gap-10 relative isolate"
+      >
         <!-- Colonne texte -->
         <div
-          class="order-2 md:order-2 md:col-span-5 flex flex-col justify-center pt-6"
+          class="order-2 md:order-2 md:col-span-5 relative z-20 flex flex-col justify-center pt-6"
         >
           <h1
             class="font-halogen font-bold uppercase leading-[0.9] tracking-tight text-[13vw] md:text-[7.5vw] xl:text-[6rem] mb-4 md:mb-6 text-center md:text-left"
@@ -31,33 +33,47 @@
         </div>
 
         <!-- Colonne image -->
-        <!-- Template (remplace juste la partie image) -->
         <div
-          class="order-1 md:order-1 md:col-span-7 flex justify-center md:justify-end"
+          class="order-1 md:order-1 md:col-span-7 relative z-10 flex justify-center md:justify-end"
         >
-          <!-- Conteneur skeleton pour éviter le saut de mise en page -->
+          <!-- Conteneur fixe -->
+          <!-- Conteneur fixe -->
           <div
-            class="h-[65vh] md:h-[100vh] w-full md:w-auto bg-gray-100 rounded shadow-lg flex items-center justify-center"
-            v-if="!heroReady"
+            class="relative w-full md:w-auto h-[65vh] md:h-[100vh] rounded shadow-lg overflow-hidden"
           >
-            <span class="text-sm text-gray-400">Chargement…</span>
-          </div>
+            <!-- Skeleton discret PENDANT l’essai -->
+            <Transition name="fade">
+              <div
+                v-if="!heroAttempted && !heroReady"
+                class="absolute inset-0 bg-neutral-200 motion-safe:animate-pulse"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent"
+                ></div>
+              </div>
+            </Transition>
 
-          <SmartImage
-            v-else
-            :src="heroSrc"
-            :alt="heroAlt"
-            eager
-            :intrinsic="{ width: 1440, height: 2160 }"
-            sizes="(min-width:1024px) 50vw, 90vw"
-            imgClass="h-[65vh] md:h-[100vh] w-auto object-cover shadow-lg"
-          />
+            <!-- Image si et seulement si elle a été chargée -->
+            <Transition name="fade">
+              <SmartImage
+                v-if="heroReady"
+                :src="heroSrc"
+                :alt="heroAlt"
+                eager
+                :intrinsic="{ width: 1440, height: 2160 }"
+                sizes="(min-width:1024px) 50vw, 90vw"
+                wrapperClass="absolute inset-0 w-full h-full"
+                imgClass="block w-full h-full object-cover"
+              />
+            </Transition>
+          </div>
         </div>
       </div>
 
-      <!-- Carousel -->
+      <!-- Carousel : monté seulement quand prêt (indépendant) -->
       <div class="w-full overflow-hidden px-4 mt-16 select-none mx-auto">
-        <Carousel :images="images" />
+        <Carousel v-if="carouselReady" :images="images" />
+        <div v-else class="h-[40vh] md:h-[50vh] bg-neutral-100 rounded"></div>
       </div>
     </div>
   </section>
@@ -70,43 +86,67 @@ import Carousel from "../../components/Carousel.vue";
 import SmartImage from "../../components/SmartImage.vue";
 
 const images = ref([]);
+const carouselReady = ref(false);
 
-// état pour le hero
 const heroSrc = ref("");
 const heroAlt = ref("Image d'accueil");
-const heroReady = ref(false); // on n’affiche l’img qu’une fois prête
+const heroReady = ref(false);
 
-onMounted(async () => {
-  // carrousel (inchangé)
-  const data = await fetchCarousel();
-  images.value = (data || []).map((img) => img.url);
-
-  // précharger l’image aléatoire avant de l’afficher
-  try {
-    const random = await getRandomHeroImage(); // {url, alt} | null
-    if (random?.url) {
-      const pre = new Image();
-      pre.onload = () => {
-        heroSrc.value = random.url;
-        heroAlt.value = random.alt || "Image d'accueil";
-        heroReady.value = true;
-      };
-      pre.onerror = () => {
-        // fallback silencieux si erreur réseau
-        heroSrc.value = "/static/home/ImageHome/Grandeimage.png";
-        heroAlt.value = "Image d'accueil";
-        heroReady.value = true;
-      };
-      pre.src = random.url;
-    } else {
-      heroSrc.value = "/static/home/ImageHome/Grandeimage.png";
-      heroAlt.value = "Image d'accueil";
-      heroReady.value = true;
-    }
-  } catch {
-    heroSrc.value = "/static/home/ImageHome/Grandeimage.png";
-    heroAlt.value = "Image d'accueil";
-    heroReady.value = true;
-  }
+// lance les 2 chargements en parallèle
+onMounted(() => {
+  loadHero();
+  loadCarousel();
 });
+
+async function loadHero() {
+  try {
+    const random = await getRandomHeroImage(); // { url, alt } | null
+
+    // Pas d'URL => on arrête, pas d'image
+    if (!random?.url) {
+      heroAttempted.value = true;
+      return;
+    }
+
+    const url = random.url;
+    const alt = random.alt || "";
+
+    // Précharge puis affiche si OK
+    const pre = new Image();
+    pre.onload = () => {
+      heroSrc.value = url;
+      heroAlt.value = alt;
+      heroReady.value = true;
+      heroAttempted.value = true;
+    };
+    pre.onerror = () => {
+      // Échec : pas d'image, pas de skeleton permanent
+      heroAttempted.value = true;
+    };
+    pre.src = url;
+  } catch {
+    // Erreur API : pas d'image
+    heroAttempted.value = true;
+  }
+}
+
+async function loadCarousel() {
+  try {
+    const data = await fetchCarousel();
+    images.value = (data || []).map((img) => img.url);
+  } finally {
+    carouselReady.value = true; // monte le carrousel dès que la liste est là
+  }
+}
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

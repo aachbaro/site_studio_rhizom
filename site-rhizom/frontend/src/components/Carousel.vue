@@ -18,9 +18,7 @@
               :alt="img.title || `Slide ${i + 1}`"
               class="w-full h-full object-cover rounded"
             />
-            <span
-              class="absolute inset-0 pointer-events-none noise-overlay"
-            ></span>
+            <span class="absolute inset-0 pointer-events-none"></span>
           </div>
         </template>
       </div>
@@ -86,16 +84,5 @@ function pauseScroll() {
   100% {
     transform: translateX(-50%);
   }
-}
-.noise-overlay {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: url("/static/noise.png");
-  mix-blend-mode: screen;
-  opacity: 0.28;
-  z-index: 2;
-  pointer-events: none;
-  position: absolute;
 }
 </style>

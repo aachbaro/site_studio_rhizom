@@ -1,7 +1,11 @@
 <template>
   <div
     class="fixed inset-0 z-[100] bg-black transition-opacity duration-5000"
-    :class="exiting ? 'opacity-0' : 'opacity-100'"
+    :class="
+      exiting
+        ? 'opacity-0 pointer-events-none' /* CHANGÉ: click-through pendant le fade */
+        : 'opacity-100 pointer-events-auto' /* CHANGÉ: interactions actives quand playing */
+    "
   >
     <video
       ref="vid"

@@ -5,12 +5,14 @@
       ref="track"
       class="overflow-x-auto scroll-smooth snap-x snap-mandatory flex hide-scrollbar snap-track"
     >
+      <!-- SLIDE : items-stretch + hauteur -->
       <div
         v-for="(p, i) in projects"
         :key="i"
-        class="flex-none snap-start relative overflow-hidden flex flex-col items-center justify-start"
+        class="flex-none snap-start relative overflow-hidden flex flex-col items-stretch"
         :style="{ width: slideW + 'px' }"
       >
+        <!-- SmartImage : wrapper et image qui remplissent -->
         <SmartImage
           :src="p.url"
           :alt="p.title"
@@ -18,21 +20,22 @@
           :intrinsic="p.intrinsic || null"
           :srcset="p.srcset || ''"
           :sizes="p.sizes || carouselSizes"
-          imgClass="w-full h-auto object-cover md:h-[100svh]"
+          wrapperClass="w-full h-auto md:h-[100svh]"
+          imgClass="block w-full h-full object-cover"
         />
 
-        <!-- Titre mobile sous l'image -->
+        <!-- Titre mobile (ok, espace vertical assumé) -->
         <div class="md:hidden w-full text-center mt-2">
           <h3 class="text-2xl uppercase mt-5">{{ p.title }}</h3>
         </div>
 
-        <!-- Overlay titre (desktop) -->
+        <!-- Overlay desktop -->
         <div
           class="hidden md:flex absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 items-center justify-center"
         >
-          <span class="text-white text-3xl text-center uppercase">
-            {{ p.title }}
-          </span>
+          <span class="text-white text-3xl text-center uppercase">{{
+            p.title
+          }}</span>
         </div>
       </div>
     </div>
@@ -87,8 +90,7 @@ const props = defineProps({
   projects: { type: Array, required: true },
 });
 
-const carouselSizes =
-  "(min-width:1280px) 33vw, (min-width:768px) 50vw, 90vw";
+const carouselSizes = "(min-width:1280px) 33vw, (min-width:768px) 50vw, 90vw";
 
 const width = ref(window.innerWidth);
 const updateWidth = () => (width.value = window.innerWidth);
