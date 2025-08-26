@@ -1,0 +1,27 @@
+Options -MultiViews
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # (A) Canonique : forcer sans www
+  RewriteCond %{HTTP_HOST} ^www\.studiorhizom\.com$ [NC]
+  RewriteRule ^ https://studiorhizom.com%{REQUEST_URI} [R=301,L]
+
+  # (B) Forcer HTTPS (gère le proxy OVH)
+  RewriteCond %{HTTPS} !on [OR]
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # (C) Fichiers/dossiers existants
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # (D) API PHP
+  RewriteRule ^api/ - [L]
+
+  # (E) SPA Vue
+  RewriteRule . /index.html [L]
+</IfModule>

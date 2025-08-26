@@ -9,7 +9,7 @@
           class="order-2 md:order-2 md:col-span-5 relative z-20 flex flex-col justify-center pt-6"
         >
           <h1
-            class="font-halogen font-bold uppercase leading-[0.9] tracking-tight text-[13vw] md:text-[7.5vw] xl:text-[6rem] mb-4 md:mb-6 text-center md:text-left"
+            class="font-urw font-bold uppercase leading-[0.9] tracking-tight text-[13vw] md:text-[7.5vw] xl:text-[6rem] mb-4 md:mb-6 text-center md:text-left"
           >
             <span class="block">Studio</span>
             <span class="block md:relative md:left-[-10rem]">Rhizom</span>

@@ -5,7 +5,7 @@
     <div class="w-full px-6 py-4 flex justify-between items-center">
       <router-link
         to="/"
-        class="font-halogen text-3xl uppercase tracking-tight"
+        class="font-urw text-3xl uppercase tracking-tight leading-none"
       >
         Rhizom
       </router-link>
@@ -28,40 +28,43 @@
         </router-link>
       </nav>
 
-      <!-- Mobile Hamburger -->
+      <!-- Mobile Hamburger (sans px) -->
       <button
         @click="toggleMenu"
-        class="md:hidden focus:outline-none"
+        class="md:hidden inline-flex items-center justify-center aspect-square text-[1.25em] leading-none focus:outline-none"
         aria-label="Ouvrir le menu"
       >
         <span class="sr-only">Ouvrir le menu</span>
+
+        <!-- Icône = 1em => suit la taille de police du bouton -->
         <svg
           v-if="!isOpen"
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
+          class="h-[1em] w-[1em] align-middle"
           viewBox="0 0 24 24"
+          fill="none"
           stroke="currentColor"
+          stroke-width="2"
         >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
             d="M4 6h16M4 12h16M4 18h16"
           />
         </svg>
+
         <svg
           v-else
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
-          fill="none"
+          class="h-[1em] w-[1em] align-middle"
           viewBox="0 0 24 24"
+          fill="none"
           stroke="currentColor"
+          stroke-width="2"
         >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
             d="M6 18L18 6M6 6l12 12"
           />
         </svg>
@@ -98,9 +101,9 @@ import { ref } from "vue";
 import { useRoute } from "vue-router";
 
 const links = [
-  { name: "Projets", path: "/projets" },
+  { name: "projets", path: "/projets" },
   { name: "le studio", path: "/studio" },
-  { name: "Contact", path: "/contact" },
+  { name: "contact", path: "/contact" },
 ];
 
 const route = useRoute();

@@ -6,6 +6,7 @@ import Contact from "../pages/Contact/index.vue";
 import Admin from "../pages/Admin/index.vue";
 import MentionsLegales from "../pages/mentions-legales/MentionsLegales.vue";
 import Cookies from "../pages/cookies/Cookies.vue";
+import { createWebHistory } from "vue-router";
 
 const routes = [
   { path: "/", component: Home },
@@ -22,7 +23,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
   scrollBehavior() {
     return { top: 0 };

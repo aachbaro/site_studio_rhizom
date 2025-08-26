@@ -39,8 +39,8 @@ const SPLASH_VIDEO = "/static/home/intro.mp4";
 // Force via ?splash=1
 const force = new URLSearchParams(location.search).get("splash") === "1";
 // Toutes les 15 minutes :
-// const SPLASH_INTERVAL = 15 * 60 * 1000;
-const SPLASH_INTERVAL = 0;
+const SPLASH_INTERVAL = 15 * 60 * 1000;
+// const SPLASH_INTERVAL = 0;
 
 const lastSplash = parseInt(localStorage.getItem("lastSplashTime") || "0", 10);
 const now = Date.now();

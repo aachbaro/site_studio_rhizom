@@ -1,83 +1,10 @@
-/* Halogen Regular */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-Regular.woff2") format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-Regular.woff") format("woff");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-/* Halogen Bold */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-Bold.woff2") format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-Bold.woff") format("woff");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-/* Halogen Black */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-Black.woff2") format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-Black.woff") format("woff");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-/* Halogen Light */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-Light.woff2") format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-Light.woff") format("woff");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-/* Halogen Medium */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-Medium.woff2") format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-Medium.woff") format("woff");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-/* Halogen Thin */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-Thin.woff2") format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-Thin.woff") format("woff");
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-/* Halogen Italics (Regular) */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-RegularOblique.woff2")
-      format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-RegularOblique.woff") format("woff");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-/* Halogen Italics (Bold) */
-@font-face {
-  font-family: "Halogen";
-  src: url("./assets/fonts/Halogen/Halogen-BoldOblique.woff2") format("woff2"),
-    url("./assets/fonts/Halogen/Halogen-BoldOblique.woff") format("woff");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: "Arial", sans-serif;
+  /* font-family: "Arial", sans-serif; */
+  font-family: "ff-real-text-pro", sans-serif;
 }
 
 *,

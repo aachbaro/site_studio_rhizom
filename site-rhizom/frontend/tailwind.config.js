@@ -9,8 +9,10 @@ module.exports = {
         primary: "#00FF99",
       },
       fontFamily: {
-        poppins: ["Arial", "sans-serif"],
-        halogen: ["Halogen", "sans-serif"],
+        poppins: ["ff-real-text-pro", "sans-serif"],
+        halogen: ["urw-form", "sans-serif"],
+        real: ['"ff-real-text-pro"', "sans-serif"],
+        urw: ['"urw-form"', "sans-serif"],
       },
       transitionDuration: {
         2000: "2000ms",
