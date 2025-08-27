@@ -1,6 +1,6 @@
 <template>
   <header
-    class="static md:fixed md:top-0 md:left-0 md:w-full z-50 bg-transparent"
+    class="static lg:fixed lg:top-0 lg:left-0 lg:w-full z-50 bg-transparent"
   >
     <div class="w-full px-6 py-4 flex justify-between items-center">
       <router-link
@@ -18,17 +18,17 @@
           :to="link.path"
           :aria-current="isActivePath(link.path) ? 'page' : undefined"
           :class="[
-            'btn-nav border-black lowercase', // base
+            'btn-nav border-black lowercase',
             isActivePath(link.path)
-              ? 'btn-nav--active' // actif = inversé
-              : 'hover:bg-black hover:text-white', // au survol sinon
+              ? 'btn-nav--active'
+              : 'hover:bg-black hover:text-white',
           ]"
         >
           {{ link.name }}
         </router-link>
       </nav>
 
-      <!-- Mobile Hamburger (sans px) -->
+      <!-- Mobile Hamburger -->
       <button
         @click="toggleMenu"
         class="md:hidden inline-flex items-center justify-center aspect-square text-[1.25em] leading-none focus:outline-none"
@@ -36,7 +36,6 @@
       >
         <span class="sr-only">Ouvrir le menu</span>
 
-        <!-- Icône = 1em => suit la taille de police du bouton -->
         <svg
           v-if="!isOpen"
           xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +80,7 @@
               @click="closeMenu"
               :aria-current="isActivePath(link.path) ? 'page' : undefined"
               :class="[
-                'btn-nav w-full justify-center', // base mobile
+                'btn-nav w-full justify-center',
                 isActivePath(link.path)
                   ? 'btn-nav--active'
                   : 'hover:bg-black hover:text-white',

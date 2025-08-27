@@ -2,14 +2,14 @@
   <section class="min-h-screen flex-col bg-white flex items-center">
     <div class="w-full px-4 md:px-8">
       <div
-        class="grid grid-cols-1 md:grid-cols-12 items-center md:gap-10 relative isolate"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-12 items-center sm:gap-6 md:gap-10 relative isolate"
       >
         <!-- Colonne texte -->
         <div
           class="order-2 md:order-2 md:col-span-5 relative z-20 flex flex-col justify-center pt-6"
         >
           <h1
-            class="font-urw font-bold uppercase leading-[0.9] tracking-tight text-[13vw] md:text-[7.5vw] xl:text-[6rem] mb-4 md:mb-6 text-center md:text-left"
+            class="font-urw font-bold uppercase leading-[0.9] tracking-tight text-[13vw] sm:text-[10vw] md:text-[7.5vw] xl:text-[6rem] mb-4 md:mb-6 text-center md:text-left"
           >
             <span class="block">Studio</span>
             <span class="block md:relative md:left-[-10rem]">Rhizom</span>
@@ -36,12 +36,9 @@
         <div
           class="order-1 md:order-1 md:col-span-7 relative z-10 flex justify-center md:justify-end"
         >
-          <!-- Conteneur fixe -->
-          <!-- Conteneur fixe -->
           <div
-            class="relative w-full md:w-auto h-[65vh] md:h-[100vh] rounded shadow-lg overflow-hidden"
+            class="relative w-full sm:max-w-[90%] md:w-auto h-[65vh] md:h-[100vh] rounded shadow-lg overflow-hidden"
           >
-            <!-- Skeleton discret PENDANT l’essai -->
             <Transition name="fade">
               <div
                 v-if="!heroAttempted && !heroReady"
@@ -53,7 +50,6 @@
               </div>
             </Transition>
 
-            <!-- Image si et seulement si elle a été chargée -->
             <Transition name="fade">
               <SmartImage
                 v-if="heroReady"
@@ -70,7 +66,7 @@
         </div>
       </div>
 
-      <!-- Carousel : monté seulement quand prêt (indépendant) -->
+      <!-- Carousel -->
       <div class="w-full overflow-hidden px-4 mt-16 select-none mx-auto">
         <Carousel v-if="carouselReady" :images="images" />
         <div v-else class="h-[40vh] md:h-[50vh] bg-neutral-100 rounded"></div>
