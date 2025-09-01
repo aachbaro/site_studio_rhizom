@@ -50,6 +50,9 @@ try {
     $mail->setFrom(SMTP_USER, $name);
     $mail->addAddress(DEST_EMAIL);
 
+    $mail->addReplyTo($email, $name);
+    
+
     // Contenu
     $mail->isHTML(false);
     $mail->Subject = $objet;  // <-- UTILISATION DE L’OBJET DU FORMULAIRE

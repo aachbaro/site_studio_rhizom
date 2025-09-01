@@ -65,3 +65,25 @@ body {
     height: 0;
   }
 }
+
+/* src/main.css */
+@layer components {
+  .ty-hero {
+    @apply font-urw font-black leading-[0.9] text-[clamp(2.5rem,9vw,8.25rem)];
+  }
+  .ty-h1 {
+    @apply font-urw font-black leading-tight text-5xl;
+  } /* ~48px */
+  .ty-h2 {
+    @apply font-urw font-normal leading-tight text-2xl;
+  } /* ~24px */
+  .ty-body {
+    @apply font-real font-normal leading-[1.45] text-[26px];
+  } /* 26px */
+  .ty-body-sm {
+    @apply font-real font-light  leading-[1.5]  text-2xl;
+  } /* 24px */
+  .ty-body-bold {
+    @apply font-real font-bold   leading-[1.45] text-[26px];
+  } /* 26px bold */
+}

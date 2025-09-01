@@ -1,5 +1,5 @@
 <template>
-  <section class="min-h-screen flex-col bg-white flex items-center">
+  <section class="min-h-screen flex-col bg-white flex items-center font-guide">
     <div class="w-full px-4 md:px-8">
       <div
         class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-12 items-center sm:gap-6 md:gap-10 relative isolate"
@@ -8,26 +8,31 @@
         <div
           class="order-2 md:order-2 md:col-span-5 relative z-20 flex flex-col justify-center pt-6"
         >
+          <!-- Titre centré dans la zone blanche -->
           <h1
-            class="font-urw font-bold uppercase leading-[0.9] tracking-tight text-[13vw] sm:text-[10vw] md:text-[7.5vw] xl:text-[6rem] mb-4 md:mb-6 text-center md:text-left"
+            class="ty-hero uppercase leading-[0.85] tracking-tight text-[13vw] sm:text-[10vw] md:text-[6.5vw] xl:text-[5rem] mb-4 md:mb-6 text-center md:text-left text-black"
           >
             <span class="block">Studio</span>
-            <span class="block md:relative md:left-[-10rem]">Rhizom</span>
+            <span class="block">Rhizom</span>
           </h1>
 
+          <!-- Texte resserré + saut de ligne manuel -->
           <p
-            class="text-[clamp(0.95rem,1.2vw,1.125rem)] leading-relaxed md:leading-7 max-w-[42ch] md:max-w-[47ch] mx-auto md:mx-0 mb-6 md:mb-8 text-center md:text-left"
+            class="ty-body text-[clamp(0.95rem,1.2vw,1.125rem)] leading-[1.45] md:leading-[1.4] max-w-[42ch] md:max-w-[47ch] mx-auto md:mx-0 mb-6 md:mb-8 text-center md:text-left"
           >
             Rhizom est un studio de design floral constitué de plusieurs
             sensibilités artistiques. Notre approche nous situe à la frontière
-            entre la botanique, l’artisanat et l’art. Nous travaillons la fleur
-            et le végétal à la manière d’une oeuvre plastique. La matière
-            devient sujet et se transforme sous le geste. Elle prend pied sur un
-            kenzan, se plonge dans un vase ou se déploie dans l’espace comme une
-            scénographie.
+            entre la botanique, l’artisanat et l’art. <br />
+            Nous travaillons la fleur et le végétal à la manière d’une œuvre
+            plastique. La matière devient sujet et se transforme sous le geste.
+            Elle prend pied sur un kenzan, se plonge dans un vase ou se déploie
+            dans l’espace comme une scénographie.
           </p>
 
-          <router-link to="/projets" class="btn-thin self-center md:self-start">
+          <router-link
+            to="/projets"
+            class="ty-body-bold btn-thin self-center md:self-start"
+          >
             Découvrez notre travail.
           </router-link>
         </div>
@@ -37,7 +42,7 @@
           class="order-1 md:order-1 md:col-span-7 relative z-10 flex justify-center md:justify-end"
         >
           <div
-            class="relative w-full sm:max-w-[90%] md:w-auto h-[65vh] md:h-[100vh] rounded shadow-lg overflow-hidden"
+            class="relative w-full sm:max-w-[90%] md:w-auto h-[65vh] md:h-[100vh] shadow-lg overflow-hidden"
           >
             <Transition name="fade">
               <div
@@ -65,12 +70,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Carousel -->
-      <div class="w-full overflow-hidden px-4 mt-16 select-none mx-auto">
-        <Carousel v-if="carouselReady" :images="images" />
-        <div v-else class="h-[40vh] md:h-[50vh] bg-neutral-100 rounded"></div>
-      </div>
     </div>
   </section>
 </template>
@@ -78,7 +77,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { fetchCarousel, getRandomHeroImage } from "../../services/api";
-import Carousel from "../../components/Carousel.vue";
 import SmartImage from "../../components/SmartImage.vue";
 
 const images = ref([]);

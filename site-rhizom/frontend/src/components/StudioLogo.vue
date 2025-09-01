@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-const logoUrl = "/static/logo/studio-logo.svg";
+const logoUrl = "/static/logo/new_studio-logo.svg";
 </script>

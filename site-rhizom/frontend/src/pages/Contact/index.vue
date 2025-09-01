@@ -66,7 +66,7 @@
         <div class="mt-2">
           <button
             type="submit"
-            class="ml-auto block border border-black rounded-full px-8 py-2 text-sm lowercase hover:bg-black hover:text-white transition-colors"
+            class="ml-auto block border border-black rounded-full px-8 py-2 ty-body-bold text-sm lowercase hover:bg-black hover:text-white transition-colors"
           >
             envoyer
           </button>

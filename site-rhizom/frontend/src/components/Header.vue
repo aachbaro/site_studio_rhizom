@@ -5,7 +5,7 @@
     <div class="w-full px-6 py-4 flex justify-between items-center">
       <router-link
         to="/"
-        class="font-urw text-3xl uppercase tracking-tight leading-none"
+        class="ty-h1 font-bold text-3xl uppercase tracking-tight leading-none"
       >
         Rhizom
       </router-link>
@@ -18,7 +18,7 @@
           :to="link.path"
           :aria-current="isActivePath(link.path) ? 'page' : undefined"
           :class="[
-            'btn-nav border-black lowercase',
+            'ty-body-bold btn-nav border-black lowercase',
             isActivePath(link.path)
               ? 'btn-nav--active'
               : 'hover:bg-black hover:text-white',

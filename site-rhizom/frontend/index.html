@@ -1,21 +1,42 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>Studio Rhizom</title>
+
+    <!-- Meta description (snippet Google) -->
+    <meta
+      name="description"
+      content="Rhizom, studio de design floral, mêle botanique, artisanat et art pour créer des compositions uniques, pour l’événementiel, portées par des sensibilités artistiques variées."
+    />
+
+    <!-- Favicon unique (PNG carré, idéalement 512×512) -->
+    <link rel="icon" type="image/png" href="/static/logo/studio-logo.png" />
+
+    <!-- Données structurées : logo d’organisation -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Studio Rhizom",
+        "url": "https://studiorhizom.com",
+        "logo": "https://studiorhizom.com/static/logo/studio-logo.png"
+      }
+    </script>
+
+    <title>Studio Rhizom – Design floral</title>
+
+    <!-- Polices -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://use.typekit.net/uul1ddw.css">
+    <link rel="stylesheet" href="https://use.typekit.net/uul1ddw.css" />
   </head>
   <body>
+    <h1 class="sr-only">Studio Rhizom – Studio de design floral</h1>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>

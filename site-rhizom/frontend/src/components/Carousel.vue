@@ -6,19 +6,19 @@
       <div
         class="carousel-track flex gap-6 min-w-max"
         :style="{ animationDuration: `${duration}s` }"
+        ref="track"
       >
         <template v-for="n in 2" :key="n">
           <div
             v-for="(img, i) in images"
             :key="`${n}-${img.id || i}`"
-            class="flex-shrink-0 w-96 h-[28rem] relative overflow-hidden"
+            class="flex-shrink-0 flex items-center justify-center h-[30vh] sm:h-[45vh] md:h-[30vh] lg:h-[30vh] xl:h-[30vh] overflow-hidden"
           >
             <img
               :src="img"
               :alt="img.title || `Slide ${i + 1}`"
-              class="w-full h-full object-cover rounded"
+              class="h-full w-auto object-contain"
             />
-            <span class="absolute inset-0 pointer-events-none"></span>
           </div>
         </template>
       </div>

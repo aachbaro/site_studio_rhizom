@@ -3,16 +3,22 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens: {
+        landscape: { raw: "(orientation: landscape)" },
+      },
       colors: {
         background: "#FFFFFF",
         foreground: "#000000",
         primary: "#00FF99",
       },
       fontFamily: {
-        poppins: ["ff-real-text-pro", "sans-serif"],
-        halogen: ["urw-form", "sans-serif"],
-        real: ['"ff-real-text-pro"', "sans-serif"],
-        urw: ['"urw-form"', "sans-serif"],
+        urw: ['"urw-form"', "ui-sans-serif", "system-ui", "sans-serif"],
+        real: [
+          '"ff-real-text-pro"',
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
+        ],
       },
       transitionDuration: {
         2000: "2000ms",
