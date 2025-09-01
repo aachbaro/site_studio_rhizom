@@ -47,13 +47,13 @@
       </div>
     </section>
 
-    <!-- SECTION 2 : DÉMARCHE (inchangée) -->
+    <!-- SECTION 2 : DÉMARCHE -->
     <section
       id="demarche"
       class="bg-white py-8 lg:py-14 xl:py-16 lg:min-h-[100svh] lg:snap-start"
     >
       <figure
-        class="relative w-full aspect-[4/5] lg:aspect-auto lg:h-[calc(100svh-7rem)] xl:h-[calc(100svh-8rem)]"
+        class="relative w-full aspect-[4/5] lg:aspect-auto min-h-[560px] lg:h-[calc(100svh-7rem)] xl:h-[calc(100svh-8rem)]"
       >
         <img
           src="/static/home/Carousel/Carou7.png"
@@ -62,12 +62,10 @@
           loading="lazy"
         />
 
-        <!-- Overlay (desktop/portrait) -->
-        <div
-          class="not-landscape absolute inset-0 flex justify-center lg:justify-start"
-        >
+        <!-- Overlay : bloc ancré à GAUCHE à toutes tailles -->
+        <div class="not-landscape absolute inset-0 flex justify-start">
           <div
-            class="self-start lg:self-center px-4 lg:px-16 xl:px-24 pt-2 lg:pt-10 max-w-[52ch] text-white mx-auto lg:mx-0 text-left"
+            class="self-start lg:self-center pl-4 sm:pl-6 md:pl-16 lg:pl-24 pr-4 max-w-[52ch] text-white text-left pt-4"
           >
             <h3
               class="font-urw font-black uppercase tracking-tight text-[clamp(1.5rem,4.5vw,3rem)] leading-tight mb-4"
@@ -118,7 +116,6 @@
         </p>
       </div>
     </section>
-
     <!-- SECTION 3 : ENGAGEMENT -->
     <section
       id="engagement"
@@ -128,20 +125,20 @@
         <div
           class="grid grid-cols-1 lg:grid-cols-12 lg:gap-x-10 xl:gap-x-12 lg:h-[calc(100svh-7rem)] xl:h-[calc(100svh-8rem)]"
         >
-          <!-- Image centrée verticalement -->
-          <figure class="order-1 lg:order-1 lg:col-span-7 flex items-center">
+          <!-- Image : top align, remplit la hauteur, rognage OK -->
+          <figure
+            class="order-1 lg:order-1 lg:col-span-7 relative h-[50vh] lg:h-full overflow-hidden"
+          >
             <img
               src="/static/studio/mains-projets.jpg"
               alt="Fleur locale"
-              class="w-full h-auto lg:max-h-full object-cover object-center"
+              class="absolute inset-0 w-full h-full object-cover object-center"
               loading="lazy"
             />
           </figure>
 
-          <!-- Texte aligné haut avec l’image -->
-          <div
-            class="order-2 lg:order-2 lg:col-span-5 flex items-start lg:pt-10"
-          >
+          <!-- Texte : top align (même top que l'image) -->
+          <div class="order-2 lg:order-2 lg:col-span-5 flex items-start">
             <div class="px-4 lg:px-0 w-full max-w-[48ch] lg:pr-10 mt-6 lg:mt-0">
               <h3
                 class="font-urw font-black uppercase tracking-tight text-[clamp(1.5rem,4.5vw,2.5rem)] leading-[1.02] mb-4"
@@ -198,6 +195,16 @@
     overflow: visible !important;
   }
   /* Section 2 : cacher l'overlay et montrer le texte sous l'image, en noir */
+  .not-landscape {
+    display: none !important;
+  }
+  .only-landscape {
+    display: block !important;
+  }
+}
+
+/* Desktop à faible hauteur : bascule overlay -> texte dessous */
+@media (min-width: 1024px) and (max-height: 800px) {
   .not-landscape {
     display: none !important;
   }

@@ -28,7 +28,7 @@
         <div
           class="font-urw font-black text-[28px] leading-[1.05] tracking-tight uppercase md:hidden w-full text-center mt-2"
         >
-          <h3 class="text-2xl uppercase mt-5">{{ p.title }}</h3>
+          <h3 class="font-urw text-2xl uppercase mt-5">{{ p.title }}</h3>
         </div>
 
         <!-- Overlay desktop -->
@@ -36,7 +36,7 @@
           class="hidden md:flex absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 items-center justify-center"
         >
           <span
-            class="text-white text-[1.200rem] leading-tight text-center uppercase font-guide"
+            class="font-urw text-white text-[1.200rem] leading-tight text-center uppercase font-guide"
           >
             {{ p.title }}
           </span>

@@ -41,8 +41,8 @@
         <div
           class="order-1 md:order-1 md:col-span-7 relative z-10 flex justify-center md:justify-end"
         >
-          <div
-            class="relative w-full sm:max-w-[90%] md:w-auto h-[65vh] md:h-[100vh] shadow-lg overflow-hidden"
+          <figure
+            class="relative w-full md:w-auto h-[100svh] overflow-hidden shadow-lg"
           >
             <Transition name="fade">
               <div
@@ -64,10 +64,10 @@
                 :intrinsic="{ width: 1440, height: 2160 }"
                 sizes="(min-width:1024px) 50vw, 90vw"
                 wrapperClass="absolute inset-0 w-full h-full"
-                imgClass="block w-full h-full object-cover"
+                imgClass="block w-full h-full object-cover object-[50%_50%]"
               />
             </Transition>
-          </div>
+          </figure>
         </div>
       </div>
     </div>
