@@ -1,34 +1,31 @@
-# Site Rhizom
+# Studio Rhizom
+## Description
 
-This repository contains the frontend and backend for the Rhizom project. Everything lives inside the `site-rhizom` folder with two sub directories:
+Site vitrine pour un studio de design floral, réalisé pour des amis.
 
-```
-site-rhizom/
-├── backend/
-│   ├── server.js
-│   ├── mailer.js
-│   ├── package.json
-│   ├── .env.example
-│   └── Dockerfile
-└── frontend/
-    ├── src/
-    ├── public/
-    ├── package.json
-    ├── vite.config.js
-    └── Dockerfile
-```
+## Objectif
 
-A single `docker-compose.yml` orchestrates the two services.
+Créer un site web simple et fonctionnel permettant de présenter le studio et ses réalisations, avec une interface d’administration pour gérer le contenu.
 
-## Usage
+## Technologies
 
-From the repository root run:
+- Vue 3
+- PHP (API)
+- MySQL
+- OVH
+- Brevo
 
-```bash
-cd site-rhizom
-docker compose up --build
-```
+## Fonctionnalités
 
-The backend will be available on `http://localhost:3001` and the frontend on `http://localhost:5173`.
+- Site vitrine présentant le studio et ses projets
+- Page d’administration protégée pour modifier les images du site
+- Formulaire de contact avec système de mailer
 
-Environment variables for the backend should be defined in `backend/.env` (you can copy `backend/.env.example`).
+## État du projet
+
+- Le site est fonctionnel et déployé sur OVH.
+- Il reste quelques ajustements esthétiques à finaliser.
+
+## Contexte
+
+Projet réalisé pour des amis, dans un cadre concret, proche d’un projet client.
