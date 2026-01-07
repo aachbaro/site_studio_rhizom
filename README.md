@@ -23,7 +23,7 @@ Créer un site web simple et fonctionnel permettant de présenter le studio et s
 
 ## État du projet
 
-- Le site est fonctionnel et déployé sur OVH.
+- Le site est fonctionnel et déployé sur OVH. Accessible à l'adresse https://studiorhizom.com/
 - Il reste quelques ajustements esthétiques à finaliser.
 
 ## Contexte
